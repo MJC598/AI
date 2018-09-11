@@ -1,21 +1,3 @@
-
-if __name__ == '__main__':
-
-    testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
-    testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
-    goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
-	fringe = []
-
-	filename = input("Please enter the filename of the puzzle you wish to have solved...")
-	# problem = readInFile(filename)
-	tree = Tree()
-	answer = tree.treeSearch(testCase1, fringe, goal)
-	if(answer == -1):
-		print("Life is hard and the program failed. Sorry...")
-	else:
-		print("Life is good! The program worked!")
-
-
 class Node:
 	def __init__(self, problem, nodeId, head, depth):
 		self.nodeId = nodeId
@@ -35,7 +17,7 @@ class Tree:
 			result = depthLimitedSearch(problem, goal, depth)
 			depth += 1
 			#this is the check for node otherwise continue
-			if(result not 0 and result not true):
+			if(result != 0 and result != true):
 				return result
 			#check to see if cutoff is hit
 			elif(result == true):
@@ -57,9 +39,9 @@ class Tree:
 				result = recursiveDLS(successor, problem, goal, limit)
 				if(result is cutoff):
 					cutoff = true
-				elif(result not failure):
+				elif(result != failure):
 					return result
-			if cutoff is true:
+			if(cutoff is true):
 				return cutoff
 			else:
 				return failure
@@ -68,7 +50,7 @@ class Tree:
 		#traverse the 4x4 dict to check to see if the state matches the problem
 		for x in xrange(1,4):
 			for y in xrange(1,4):
-				if(state[x][y] not goal[x][y]):
+				if(state[x][y] != goal[x][y]):
 					return false
 		return true;
 
@@ -115,6 +97,20 @@ class Tree:
 
 	    return expanded_nodes
 
+
+if __name__ == '__main__':
+    testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
+    testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
+    goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
+    fringe = []
+    #filename = input("Please enter the filename of the puzzle you wish to have solved...")
+    # problem = readInFile(filename)
+    tree = Tree()
+    answer = tree.iterativeDeepeningSearch(testCase1, goal)
+    if(answer is -1):
+        print("Life is hard and the program failed. Sorry...")
+    else:
+        print("Life is good! The program worked!")
 
 
 	# def readInFile(filename):
