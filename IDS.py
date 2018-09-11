@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
 
 def treeSearch(problem, fringe):
-	fringe = insert(makeNode(initState[problem]), fringe);
+	fringe = insert(makeNode(problem), fringe);
 	while(fringe != []):
 		node = pop(fringe)
 		if(goalTest(problem, state(node))):
@@ -33,6 +33,36 @@ def treeSearch(problem, fringe):
 		fringe = insertAll(expand(node, problem), fringe)
 	return -1;
 
-def insert():
+#inserts into tree
+def insert(node, fringe):
 
-def makeNode():
+
+#nodes should contain a nodeId, state(problem), a head, and branches
+def makeNode(problem):
+
+
+#simple pop function off a stack
+def pop(fringe):
+	if fringe not []:
+		return fringe[0]
+	else:
+		return -1;
+
+def goalTest(problem, state):
+	#traverse the 4x4 dict to check to see if the state matches the problem
+	for x in xrange(1,4):
+		for y in xrange(1,4):
+			if(state[x][y] != problem[x][y]):
+				return false
+	return true;
+
+#returns state given a nodeId
+def state(node):
+
+
+#inserts all nodes given into the fringe dict
+def insertAll(nodeList, fringe):
+
+
+#expands the tree so it can send back a nodeList to insert into the fringe
+def expand(node, problem):
