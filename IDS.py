@@ -82,7 +82,7 @@ class Tree:
 	    while 0 not in node[i]:
 	        i += 1
 	    # Record the column index of the empty space
-	    j = puzzle_state[i].index(0)
+	    j = puzzle_node[i].index(0)
 
 	    #### Creating the possible states ####
 	    # If the empty space is in the top three rows,
