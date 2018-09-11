@@ -9,7 +9,7 @@ def expand_node(puzzle_node):
         i += 1
 
     # Record the column index of the empty space
-    j = puzzle_state[i].index(0)
+    j = puzzle_node[i].index(0)
 
     #### Creating the possible states ####
 
