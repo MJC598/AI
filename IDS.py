@@ -7,7 +7,8 @@ if __name__ == '__main__':
 
 	filename = input("Please enter the filename of the puzzle you wish to have solved...")
 	# problem = readInFile(filename)
-	answer = treeSearch(testCase1, fringe)
+	tree = Tree()
+	answer = tree.treeSearch(testCase1, fringe)
 	if(answer == -1):
 		print("Life is hard and the program failed. Sorry...")
 	else:
@@ -23,46 +24,63 @@ if __name__ == '__main__':
 # 				problem[x][y] = f.read()
 # 	return problem
 
+class Node:
+	def __init__(self, problem, nodeId, head):
+		self.nodeId = nodeId
+		self.state = problem
+		self.head = head
+		self.tail = None
 
-def treeSearch(problem, fringe):
-	fringe = insert(makeNode(problem), fringe);
-	while(fringe != []):
-		node = pop(fringe)
-		if(goalTest(problem, state(node))):
-			return node
-		fringe = insertAll(expand(node, problem), fringe)
-	return -1;
+class Tree:
+	def __init__(self):
+		self.root = None
 
-#inserts into tree
-def insert(node, fringe):
-
-
-#nodes should contain a nodeId, state(problem), a head, and branches
-def makeNode(problem):
-
-
-#simple pop function off a stack
-def pop(fringe):
-	if fringe not []:
-		return fringe[0]
-	else:
+	def treeSearch(problem, fringe):
+		#create the Node and Tree
+		node = Node(problem, 0, None)
+		#insert the node into the fringe
+		fringe = insert(node, fringe);
+		while(fringe != []):
+			node = pop(fringe)
+			if(goalTest(problem, state(node))):
+				return node
+			fringe = insertAll(expand(node, problem), fringe)
 		return -1;
 
-def goalTest(problem, state):
-	#traverse the 4x4 dict to check to see if the state matches the problem
-	for x in xrange(1,4):
-		for y in xrange(1,4):
-			if(state[x][y] != problem[x][y]):
-				return false
-	return true;
-
-#returns state given a nodeId
-def state(node):
+	#inserts into tree
+	def insert(node, fringe):
 
 
-#inserts all nodes given into the fringe dict
-def insertAll(nodeList, fringe):
+	#nodes should contain a nodeId, state(problem), a head, and branches
+	def makeNode(problem, nodeId):
+		node = {}
+		node['nodeId'] = nodeId
+		node['state'] = problem
+		node['head'] = 
 
 
-#expands the tree so it can send back a nodeList to insert into the fringe
-def expand(node, problem):
+	#simple pop function off a stack
+	def pop(fringe):
+		if fringe not []:
+			return fringe[0]
+		else:
+			return -1;
+
+	def goalTest(problem, state):
+		#traverse the 4x4 dict to check to see if the state matches the problem
+		for x in xrange(1,4):
+			for y in xrange(1,4):
+				if(state[x][y] != problem[x][y]):
+					return false
+		return true;
+
+	#returns state given a nodeId
+	def state(node):
+
+
+	#inserts all nodes given into the fringe dict
+	def insertAll(nodeList, fringe):
+
+
+	#expands the tree so it can send back a nodeList to insert into the fringe
+	def expand(node, problem):
