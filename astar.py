@@ -31,14 +31,14 @@ def expand_node(puzzle_node):
     # If the empty space is in the left three columns,
     # add a node that represents the empty space moving to the right
     if j < 3:
-        puzzle_node[i][j], puzzle_node[i1][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
+        puzzle_node[i][j], puzzle_node[i][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
         expanded_nodes.append(puzzle_node)
         puzzle_node[i][j], puzzle_node[i][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
 
     # If the empty space is in the right three columns,
     # add a node that represents the empty space moving to the left
-    if j < 3:
-        puzzle_node[i][j], puzzle_node[i1][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
+    if j > 0:
+        puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
         expanded_nodes.append(puzzle_node)
         puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
 
