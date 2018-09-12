@@ -5,7 +5,7 @@ def expand_node(puzzle_node):
 
     i = 0
     # Search for the empty space
-    while 0 not in node[i]:
+    while 0 not in expanded_nodes[i]:
         i += 1
 
     # Record the column index of the empty space
