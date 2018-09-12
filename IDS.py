@@ -84,6 +84,16 @@ class Tree:
 			expanded_nodes.append(puzzle_node)
 			puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
 
+		# for d in expanded_nodes:
+		# 	for x in range(0,4):
+		# 		for y in range(0,4):
+		# 			if(d[x][y] <= 9):
+		# 				print("0", end='')
+		# 			print(d[x][y], end='')
+		# 			print(" ", end='')
+		# 		print("\n", end='') 
+		# 	print("--------------------")
+
 		nodeList = []
 		for x in expanded_nodes:
 			depth = prevNode.depth + 1
