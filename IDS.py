@@ -1,6 +1,5 @@
 class Node:
-	def __init__(self, problem, nodeId, head, depth):
-		self.nodeId = nodeId
+	def __init__(self, problem, head, depth):
 		self.state = problem
 		self.head = head
 		self.depth = depth
@@ -10,58 +9,59 @@ class Tree:
 	def __init__(self):
 		self.root = None
 
-	def iterativeDeepeningSearch(problem, goal):
-		depth = 0
+	def iterativeDeepeningSearch(self, problem, goal):
+		limit = 0
 		#constantly loop until solution is found
 		while(1):
-			result = depthLimitedSearch(problem, goal, depth)
-			depth += 1
+			result = self.depthLimitedSearch(problem, goal, limit)
+			limit += 1
 			#this is the check for node otherwise continue
-			if(result != 0 and result != true):
+			if(result != 0 and result != True):
 				return result
 			#check to see if cutoff is hit
-			elif(result == true):
+			elif(result == True):
 				return -1
 
 
-	def depthLimitedSearch(problem, goal, limit):
-		node = Node(problem, 0, None)
-		return recursiveDLS(node, problem, goal, limit)
+	def depthLimitedSearch(self, problem, goal, limit):
+		node = Node(problem, None, 0)
+		return self.recursiveDLS(node, problem, goal, limit)
 
-	def recursiveDLS(node, problem, goal, limit):
-		cutoff == false
-		if(goalTest(goal, node.state)):
+	def recursiveDLS(self, node, problem, goal, limit):
+		self.printNode(node);
+		cutoff = f=False
+		if(self.goalTest(goal, node.state)):
 			return node
 		elif(node.depth is limit):
 			return cutoff
 		else:
-			for successor in expand(node.state):
-				result = recursiveDLS(successor, problem, goal, limit)
+			for successor in self.expand(node.state, node, problem):
+				result = self.recursiveDLS(successor, problem, goal, limit)
 				if(result is cutoff):
-					cutoff = true
+					cutoff = True
 				elif(result != failure):
 					return result
-			if(cutoff is true):
+			if(cutoff is True):
 				return cutoff
 			else:
 				return failure
 
-	def goalTest(goal, state):
+	def goalTest(self, goal, state):
 		#traverse the 4x4 dict to check to see if the state matches the problem
-		for x in xrange(1,4):
-			for y in xrange(1,4):
+		for x in range(0,4):
+			for y in range(0,4):
 				if(state[x][y] != goal[x][y]):
-					return false
-		return true;
+					return False
+		return True;
 
 	#expands the tree so it can send back a nodeList to insert into the fringe
 	#this is the real logic behind the IDS
-	def expand(puzzle_node):
+	def expand(self, puzzle_node, prevNode, problem):
 
 	    expanded_nodes = []
 	    i = 0
 	    # Search for the empty space
-	    while 0 not in node[i]:
+	    while 0 not in puzzle_node[i]:
 	        i += 1
 	    # Record the column index of the empty space
 	    j = puzzle_node[i].index(0)
@@ -95,7 +95,23 @@ class Tree:
 	        expanded_nodes.append(puzzle_node)
 	        puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
 
-	    return expanded_nodes
+	    #added during OO implementation to make it easier to work with the tree
+	    nodeList = []
+	    for x in expanded_nodes:
+	    	depth = prevNode.depth + 1
+	    	n = Node(x, prevNode, depth)
+	    	nodeList.append(n)
+	    return nodeList
+
+	def printNode(self, node):
+		for x in range(0,4):
+			for y in range(0,4):
+				if(node.state[x][y] <= 9):
+					print("0", end='')
+				print(node.state[x][y], end='')
+				print(" ", end='')
+			print("\n", end='') 
+		print("--------------------")
 
 
 if __name__ == '__main__':
