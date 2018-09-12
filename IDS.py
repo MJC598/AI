@@ -28,8 +28,8 @@ class Tree:
 		return self.recursiveDLS(node, problem, goal, limit)
 
 	def recursiveDLS(self, node, problem, goal, limit):
-		print(node.depth)
-		self.printNode(node);
+		# print(node.depth)
+		# self.printNode(node);
 		cutoff = False
 		if(self.goalTest(goal, node.state)):
 			return node
@@ -37,6 +37,7 @@ class Tree:
 			return 0
 		else:
 			for successor in self.expand(node.state, node, problem):
+				self.printNode(successor)
 				result = self.recursiveDLS(successor, problem, goal, limit)
 				if(result == 0):
 					cutoff = True
@@ -64,23 +65,33 @@ class Tree:
 		while 0 not in puzzle_node[i]:
 			i += 1
 		j = puzzle_node[i].index(0)
+		# print(i)
+		# print(j)
 		if i < 3:
 			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
+			# print(puzzle_node[i][j])
+			# print(puzzle_node[i+1][j])
 			expanded_nodes.append(puzzle_node)
 			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
 
 		if i > 0:
 			puzzle_node[i][j], puzzle_node[i-1][j] = puzzle_node[i-1][j], puzzle_node[i][j]
+			# print(puzzle_node[i][j])
+			# print(puzzle_node[i-1][j])
 			expanded_nodes.append(puzzle_node)
 			puzzle_node[i][j], puzzle_node[i-1][j] = puzzle_node[i-1][j], puzzle_node[i][j]
 
 		if j < 3:
 			puzzle_node[i][j], puzzle_node[i][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
+			# print(puzzle_node[i][j])
+			# print(puzzle_node[i][j+1])
 			expanded_nodes.append(puzzle_node)
 			puzzle_node[i][j], puzzle_node[i][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
 
 		if j > 0:
 			puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
+			# print(puzzle_node[i][j])
+			# print(puzzle_node[i][j-1])
 			expanded_nodes.append(puzzle_node)
 			puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
 
@@ -98,6 +109,7 @@ class Tree:
 		for x in expanded_nodes:
 			depth = prevNode.depth + 1
 			n = Node(x, prevNode, depth)
+			self.printNode(n)
 			nodeList.append(n)
 		return nodeList
 
