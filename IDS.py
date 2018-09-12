@@ -28,23 +28,24 @@ class Tree:
 		return self.recursiveDLS(node, problem, goal, limit)
 
 	def recursiveDLS(self, node, problem, goal, limit):
+		print(node.depth)
 		self.printNode(node);
-		cutoff = f=False
+		cutoff = False
 		if(self.goalTest(goal, node.state)):
 			return node
 		elif(node.depth is limit):
-			return cutoff
+			return 0
 		else:
 			for successor in self.expand(node.state, node, problem):
 				result = self.recursiveDLS(successor, problem, goal, limit)
-				if(result is cutoff):
+				if(result == 0):
 					cutoff = True
-				elif(result != failure):
+				elif(result != -1):
 					return result
 			if(cutoff is True):
-				return cutoff
+				return 0
 			else:
-				return failure
+				return -1
 
 	def goalTest(self, goal, state):
 		#traverse the 4x4 dict to check to see if the state matches the problem
@@ -57,51 +58,38 @@ class Tree:
 	#expands the tree so it can send back a nodeList to insert into the fringe
 	#this is the real logic behind the IDS
 	def expand(self, puzzle_node, prevNode, problem):
+		print("Entered expand")
+		expanded_nodes = []
+		i = 0
+		while 0 not in puzzle_node[i]:
+			i += 1
+		j = puzzle_node[i].index(0)
+		if i < 3:
+			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
+			expanded_nodes.append(puzzle_node)
+			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
 
-	    expanded_nodes = []
-	    i = 0
-	    # Search for the empty space
-	    while 0 not in puzzle_node[i]:
-	        i += 1
-	    # Record the column index of the empty space
-	    j = puzzle_node[i].index(0)
+		if i > 0:
+			puzzle_node[i][j], puzzle_node[i-1][j] = puzzle_node[i-1][j], puzzle_node[i][j]
+			expanded_nodes.append(puzzle_node)
+			puzzle_node[i][j], puzzle_node[i-1][j] = puzzle_node[i-1][j], puzzle_node[i][j]
 
-	    #### Creating the possible states ####
-	    # If the empty space is in the top three rows,
-	    # add a node that represents moving the empty space down
-	    if i < 3:
-	        puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
-	        expanded_nodes.append(puzzle_node)
-	        puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
+		if j < 3:
+			puzzle_node[i][j], puzzle_node[i][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
+			expanded_nodes.append(puzzle_node)
+			puzzle_node[i][j], puzzle_node[i][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
 
-	    # If the empty space is in the bottom 3 rows,
-	    # add a node that represents moving the empty space up
-	    if i > 0:
-	        puzzle_node[i][j], puzzle_node[i-1][j] = puzzle_node[i-1][j], puzzle_node[i][j]
-	        expanded_nodes.append(puzzle_node)
-	        puzzle_node[i][j], puzzle_node[i-1][j] = puzzle_node[i-1][j], puzzle_node[i][j]
+		if j > 0:
+			puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
+			expanded_nodes.append(puzzle_node)
+			puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
 
-	    # If the empty space is in the left three columns,
-	    # add a node that represents the empty space moving to the right
-	    if j < 3:
-	        puzzle_node[i][j], puzzle_node[i1][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
-	        expanded_nodes.append(puzzle_node)
-	        puzzle_node[i][j], puzzle_node[i][j+1] = puzzle_node[i][j+1], puzzle_node[i][j]
-
-	    # If the empty space is in the right three columns,
-	    # add a node that represents the empty space moving to the left
-	    if j < 3:
-	        puzzle_node[i][j], puzzle_node[i1][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
-	        expanded_nodes.append(puzzle_node)
-	        puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
-
-	    #added during OO implementation to make it easier to work with the tree
-	    nodeList = []
-	    for x in expanded_nodes:
-	    	depth = prevNode.depth + 1
-	    	n = Node(x, prevNode, depth)
-	    	nodeList.append(n)
-	    return nodeList
+		nodeList = []
+		for x in expanded_nodes:
+			depth = prevNode.depth + 1
+			n = Node(x, prevNode, depth)
+			nodeList.append(n)
+		return nodeList
 
 	def printNode(self, node):
 		for x in range(0,4):
