@@ -34,7 +34,7 @@ class Tree:
 	def recursiveDLS(self, node, problem, goal, limit):
 		# if(node.depth % 15 == 0):
 		# print(node.depth)
-		# self.printNode(node);
+		self.printNode(node);
 		cutoff = False
 		if(self.goalTest(goal, node.state)):
 			return node
@@ -134,12 +134,14 @@ if __name__ == '__main__':
     testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
     testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
     testCase3 = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,0,14,15]]
+    testCase4 = [[1,2,3,4],[5,6,7,8],[0,10,11,12],[9,13,14,15]]
+    testCase5 = [[1,2,3,4],[5,6,7,0],[9,10,11,8],[13,14,15,12]]
     goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
     fringe = []
     #filename = input("Please enter the filename of the puzzle you wish to have solved...")
     # problem = readInFile(filename)
     tree = Tree()
-    answer = tree.iterativeDeepeningSearch(testCase1, goal)
+    answer = tree.iterativeDeepeningSearch(testCase5, goal)
     if(answer is -1):
         print("Life is hard and the program failed. Sorry...")
     elif(answer is -2):
