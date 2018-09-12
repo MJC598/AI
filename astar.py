@@ -45,6 +45,19 @@ def expand_node(puzzle_node):
 
     return expanded_nodes
 
+def get_manhattan(puzzle_node):
+
+    manhattan_distance = 0
+
+    for i in range(4):
+        for j in range(4):
+
+            if puzzle_node[i][j] == 0:
+                continue
+            manhattan_distance = manhattan_distance + abs(i - (puzzle_node[i][j]/4)) + abs(j -(puzzle_node[i][j] % 4))
+    return manhattan_distance
+
+
 if __name__ == '__main__':
 
     test_case_1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
