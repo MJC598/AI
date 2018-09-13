@@ -23,12 +23,15 @@ class Tree:
 		limit = 0
 		result = Result(-1, 0, problem)
 		#constantly loop until solution is found
-		while(1):
+		while(result.count < 1000000):
 			# print("while loop")
 			result = self.depthLimitedSearch(problem, goal, limit)
 			limit += 1
 			#this is the check for node otherwise continue
-			return result
+			if(result.value != 0):
+				return result
+		result.value = -2
+		return result
 
 
 
@@ -56,6 +59,9 @@ class Tree:
 		else:
 			nodeList = self.expand(node.state, node, problem)
 			result.count += len(nodeList)
+			if(result.count >= 1000000):
+				result.value = 0
+				return result
 			for successor in nodeList:
 				result = self.recursiveDLS(successor, result.count, problem, goal, limit)
 				if(result.value == 0):
@@ -116,21 +122,10 @@ class Tree:
 			expanded_nodes.append(copy.deepcopy(puzzle_node))
 			puzzle_node[i][j], puzzle_node[i][j-1] = puzzle_node[i][j-1], puzzle_node[i][j]
 
-		# for d in expanded_nodes:
-		# 	for x in range(0,4):
-		# 		for y in range(0,4):
-		# 			if(d[x][y] <= 9):
-		# 				print("0", end='')
-		# 			print(d[x][y], end='')
-		# 			print(" ", end='')
-		# 		print("\n", end='') 
-		# 	print("--------------------")
-
 		nodeList = []
 		for x in expanded_nodes:
 			depth = prevNode.depth + 1
 			n = Node(x, prevNode, depth)
-			# self.printNode(n)
 			nodeList.append(n)
 		return nodeList
 
@@ -163,10 +158,19 @@ if __name__ == '__main__':
 		print(end_time - start_time)
 		print("Life is hard and the program failed. Sorry...")
 	elif(result.value is -2):
+		print(result.count)
 		print(end_time - start_time)
-		print("Reached 1000000 nodes!")
+		print("Reached 1000000 nodes program was terminated!")
 	else:
 		print(result.count)
+		# print(result.solution.depth)
+		# tree.printNode(result.solution.head)
+		x = 0
+		depth = result.solution.depth
 		tree.printNode(result.solution)
+		while(x < depth):
+			tree.printNode(result.solution.head)
+			result.solution = copy.deepcopy(result.solution.head)
+			x += 1
 		print(end_time - start_time)
 		print("Life is good! The program worked!")
