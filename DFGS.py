@@ -38,8 +38,8 @@ class Graph:
 				closed.append(node)
 				nodeList = self.expand(node.state, node, problem)
 				result.count += len(nodeList)
-				if(result.count % 1000 == 0):
-					print(result.count)
+				# if(result.count % 1000 == 0):
+				# 	print(result.count)
 				if(result.count >= 1000000):
 					result.value = -2
 					return result
