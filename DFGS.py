@@ -1,11 +1,19 @@
 import copy
+import datetime
 
 class Node:
 	def __init__(self, problem, head, depth):
+		self.count = 0
 		self.state = problem
 		self.head = head
 		self.depth = depth
 		self.tails = []
+
+class Result:
+	def __init__(self, value, count, solution):
+		self.value = value
+		self.count = count
+		self.solution = solution
 
 class Graph:
 	def __init__(self):
@@ -13,18 +21,29 @@ class Graph:
 
 	def graph_search(self, problem, fringe, goal):
 		closed = []
+		result = Result(-1, 0, problem)
 		node = Node(problem, None, 0)
 		fringe = [node]
 		while(len(fringe) <= 1000000):
 			if(fringe == []):
-				return -1
+				result.value = -1
+				return result
 			node = fringe.pop(0)
 			# self.printNode(node)
 			if(self.goalTest(goal, node.state)):
-				return node
+				result.solution = node
+				result.value = 0
+				return result
 			if node not in closed:
 				closed.append(node)
-				for x in self.expand(node.state, node, problem):
+				nodeList = self.expand(node.state, node, problem)
+				result.count += len(nodeList)
+				# if(result.count % 1000 == 0):
+				# 	print(result.count)
+				if(result.count >= 1000000):
+					result.value = -2
+					return result
+				for x in nodeList:
 					fringe.append(x)
 
 
@@ -93,19 +112,41 @@ class Graph:
 
 
 if __name__ == '__main__':
-    testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
-    testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
-    testCase3 = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,0,14,15]]
-    testCase4 = [[1,2,3,4],[5,6,7,8],[0,10,11,12],[9,13,14,15]]
-    goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
-    fringe = []
-    #filename = input("Please enter the filename of the puzzle you wish to have solved...")
-    # problem = readInFile(filename)
-    graph = Graph() 
-    answer = graph.graph_search(testCase2, fringe, goal)
-    if(answer is -1):
-        print("Life is hard and the program failed. Sorry...")
-    elif(answer is -2):
-    	print("Reached 1000000 nodes!")
-    else:
-        print("Life is good! The program worked!")
+	start_time = datetime.datetime.now()
+	testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
+	testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
+	testCase3 = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,0,14,15]]
+	testCase4 = [[1,2,3,4],[5,6,7,8],[0,10,11,12],[9,13,14,15]]
+	goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
+	fringe = []
+	#filename = input("Please enter the filename of the puzzle you wish to have solved...")
+	# problem = readInFile(filename)
+	graph = Graph() 
+	result = Result(-1, 0, testCase1)
+	result = graph.graph_search(testCase2, fringe, goal)
+	end_time = datetime.datetime.now()
+	ctime = end_time - start_time
+	if(result.value is -1):
+		print(ctime.microseconds, end='')
+		print(" microseconds")
+		print("Life is hard and the program failed. Sorry...")
+	elif(result.value is -2):
+		print(result.count)
+		print(ctime.microseconds, end='')
+		print(" microseconds")
+		print("Reached 1000000 nodes program was terminated!")
+	else:
+		x = 0
+		depth = result.solution.depth
+		print("Puzzle Steps From End to Beginning")
+		graph.printNode(result.solution)
+		while(x < depth):
+			graph.printNode(result.solution.head)
+			result.solution = copy.deepcopy(result.solution.head)
+			x += 1
+		print("nodes created: ", end='')
+		print(result.count)
+		print("time taken to execute: ", end='')
+		print(ctime.microseconds, end='')
+		print(" microseconds")
+		print("Life is good! The program worked!")

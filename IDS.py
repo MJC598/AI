@@ -1,5 +1,5 @@
 import copy
-import time
+import datetime
 
 class Node:
 	def __init__(self, problem, head, depth):
@@ -41,20 +41,14 @@ class Tree:
 
 	def recursiveDLS(self, node, count, problem, goal, limit):
 		result = Result(5, count, node)
-		# if(node.depth % 15 == 0):
-		# print("depth: ", end='')
-		# print(node.depth)
-		# self.printNode(node)
 		cutoff = False
 		if(self.goalTest(goal, node.state)):
 			result.value = 1
 			result.solution = node
-			# result.count = count
 			return result
 		elif(node.depth is limit):
 			result.value = 0
 			result.solution = node
-			# result.count = count
 			return result
 		else:
 			nodeList = self.expand(node.state, node, problem)
@@ -141,7 +135,7 @@ class Tree:
 
 
 if __name__ == '__main__':
-	start_time = time.process_time()
+	start_time = datetime.datetime.now()
 	testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
 	testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
 	testCase3 = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,0,14,15]]
@@ -151,26 +145,31 @@ if __name__ == '__main__':
 	goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
 	tree = Tree()
 	result = Result(-1, 0, testCase1)
-	result = tree.iterativeDeepeningSearch(testCase1, goal)
+	result = tree.iterativeDeepeningSearch(testCase2, goal)
 	# tree.printNode(result.solution)
-	end_time = time.process_time()
+	end_time = datetime.datetime.now()
+	ctime = end_time - start_time
 	if(result.value is -1):
-		print(end_time - start_time)
+		print(ctime.microseconds, end='')
+		print(" microseconds")
 		print("Life is hard and the program failed. Sorry...")
 	elif(result.value is -2):
 		print(result.count)
-		print(end_time - start_time)
+		print(ctime.microseconds, end='')
+		print(" microseconds")
 		print("Reached 1000000 nodes program was terminated!")
 	else:
-		print(result.count)
-		# print(result.solution.depth)
-		# tree.printNode(result.solution.head)
 		x = 0
 		depth = result.solution.depth
+		print("Puzzle Steps From End to Beginning")
 		tree.printNode(result.solution)
 		while(x < depth):
 			tree.printNode(result.solution.head)
 			result.solution = copy.deepcopy(result.solution.head)
 			x += 1
-		print(end_time - start_time)
+		print("nodes created: ", end='')
+		print(result.count)
+		print("time taken to execute: ", end='')
+		print(ctime.microseconds, end='')
+		print(" microseconds")
 		print("Life is good! The program worked!")
