@@ -1,11 +1,19 @@
 import copy
+import time
 
 class Node:
 	def __init__(self, problem, head, depth):
+		self.count = 0
 		self.state = problem
 		self.head = head
 		self.depth = depth
 		self.tails = []
+
+class Result:
+	def __init__(self, value, count, solution):
+		self.value = value
+		self.count = count
+		self.solution = solution
 
 class Tree:
 	def __init__(self):
@@ -13,46 +21,53 @@ class Tree:
 
 	def iterativeDeepeningSearch(self, problem, goal):
 		limit = 0
+		result = Result(-1, 0, problem)
 		#constantly loop until solution is found
 		while(1):
+			# print("while loop")
 			result = self.depthLimitedSearch(problem, goal, limit)
 			limit += 1
 			#this is the check for node otherwise continue
-			if(result != 0 and result != True):
-				return result
-			#check to see if cutoff is hit
-			elif(result == True):
-				return -1
-			elif(result == -2):
-				return -2
+			return result
+
 
 
 	def depthLimitedSearch(self, problem, goal, limit):
 		node = Node(problem, None, 0)
-		return self.recursiveDLS(node, problem, goal, limit)
+		return self.recursiveDLS(node, 0, problem, goal, limit)
 
-	def recursiveDLS(self, node, problem, goal, limit):
+	def recursiveDLS(self, node, count, problem, goal, limit):
+		result = Result(5, count, node)
 		# if(node.depth % 15 == 0):
+		# print("depth: ", end='')
 		# print(node.depth)
-		self.printNode(node);
+		# self.printNode(node)
 		cutoff = False
 		if(self.goalTest(goal, node.state)):
-			return node
+			result.value = 1
+			result.solution = node
+			# result.count = count
+			return result
 		elif(node.depth is limit):
-			return 0
+			result.value = 0
+			result.solution = node
+			# result.count = count
+			return result
 		else:
 			nodeList = self.expand(node.state, node, problem)
+			result.count += len(nodeList)
 			for successor in nodeList:
-				# self.printNode(successor)
-				result = self.recursiveDLS(successor, problem, goal, limit)
-				if(result == 0):
+				result = self.recursiveDLS(successor, result.count, problem, goal, limit)
+				if(result.value == 0):
 					cutoff = True
-				elif(result != -1):
+				elif(result.value != -1):
 					return result
 			if(cutoff is True):
-				return 0
+				result.value = 0
+				return result
 			else:
-				return -1
+				result.value = -1
+				return result
 
 	def goalTest(self, goal, state):
 		#traverse the 4x4 dict to check to see if the state matches the problem
@@ -77,7 +92,7 @@ class Tree:
 			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
 			# print(puzzle_node[i][j])
 			# print(puzzle_node[i+1][j])
-			expanded_nodes.append(puzzle_node)
+			expanded_nodes.append(copy.deepcopy(puzzle_node))
 			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
 
 		if i > 0:
@@ -131,57 +146,27 @@ class Tree:
 
 
 if __name__ == '__main__':
-    testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
-    testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
-    testCase3 = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,0,14,15]]
-    testCase4 = [[1,2,3,4],[5,6,7,8],[0,10,11,12],[9,13,14,15]]
-    testCase5 = [[1,2,3,4],[5,6,7,0],[9,10,11,8],[13,14,15,12]]
-    goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
-    fringe = []
-    #filename = input("Please enter the filename of the puzzle you wish to have solved...")
-    # problem = readInFile(filename)
-    tree = Tree()
-    answer = tree.iterativeDeepeningSearch(testCase5, goal)
-    if(answer is -1):
-        print("Life is hard and the program failed. Sorry...")
-    elif(answer is -2):
-    	print("Reached 1000000 nodes!")
-    else:
-        print("Life is good! The program worked!")
-
-
-	# def readInFile(filename):
-	# 	problem = [][]
-	# 	with open(filename, 'r') as f:
-	# 		#so, theoretically, this loops thru trying to add values to problem[][] giving a 4x4 matrix
-	# 		for x in xrange(1,4):
-	# 			for y in xrange(1,4):
-	# 				problem[x][y] = f.read()
-	# 	return problem
-
-	# def treeSearch(problem, fringe, goal):
-	# 	#create the root node
-	# 	node = Node(problem, 0, None)
-	# 	#insert the root node into the fringe
-	# 	fringe.append(node)
-	# 	#loop thru fringe till it is empty or the fringe reaches 1,000,000 nodes per assignment requirements
-	# 	while(fringe not [] || len(fringe) < 1000000):
-	# 		#DFS is a LIFO operation
-	# 		node = pop(fringe)
-	# 		#check goal vs node on fringe
-	# 		if(goalTest(goal, node.state)):
-	# 			return node
-	# 		fringe = insertAll(expand(node, problem), fringe)
-	# 	return -1;
-
-	# #simple pop function for returning node off a stack
-	# def pop(fringe):
-	# 	if fringe not []:
-	# 		return fringe.pop(-1)
-	# 	else:
-	# 		return -1
-
-
-	# #inserts all nodes given into the fringe dict
-	# def insertAll(nodeList, fringe):
-
+	start_time = time.process_time()
+	testCase1 = [[1,2,7,3],[5,6,11,4],[9,10,15,8],[13,14,12,0]]
+	testCase2 = [[5,1,7,3],[9,2,11,4],[13,6,15,8],[0,10,14,12]]
+	testCase3 = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,0,14,15]]
+	testCase4 = [[1,2,3,4],[5,6,7,8],[0,10,11,12],[9,13,14,15]]
+	testCase5 = [[1,2,3,4],[5,6,7,0],[9,10,11,8],[13,14,15,12]]
+	testCase6 = [[1,2,3,4],[5,6,7,8],[9,10,11,0],[13,14,15,12]]
+	goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
+	tree = Tree()
+	result = Result(-1, 0, testCase1)
+	result = tree.iterativeDeepeningSearch(testCase1, goal)
+	# tree.printNode(result.solution)
+	end_time = time.process_time()
+	if(result.value is -1):
+		print(end_time - start_time)
+		print("Life is hard and the program failed. Sorry...")
+	elif(result.value is -2):
+		print(end_time - start_time)
+		print("Reached 1000000 nodes!")
+	else:
+		print(result.count)
+		tree.printNode(result.solution)
+		print(end_time - start_time)
+		print("Life is good! The program worked!")

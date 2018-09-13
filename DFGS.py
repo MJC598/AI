@@ -19,7 +19,7 @@ class Graph:
 			if(fringe == []):
 				return -1
 			node = fringe.pop(0)
-			self.printNode(node)
+			# self.printNode(node)
 			if(self.goalTest(goal, node.state)):
 				return node
 			if node not in closed:
@@ -49,7 +49,7 @@ class Graph:
 			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
 			# print(puzzle_node[i][j])
 			# print(puzzle_node[i+1][j])
-			expanded_nodes.append(puzzle_node)
+			expanded_nodes.append(copy.deepcopy(puzzle_node))
 			puzzle_node[i][j], puzzle_node[i+1][j] = puzzle_node[i+1][j], puzzle_node[i][j]
 
 		if i > 0:
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     #filename = input("Please enter the filename of the puzzle you wish to have solved...")
     # problem = readInFile(filename)
     graph = Graph() 
-    answer = graph.graph_search(testCase4, fringe, goal)
+    answer = graph.graph_search(testCase2, fringe, goal)
     if(answer is -1):
         print("Life is hard and the program failed. Sorry...")
     elif(answer is -2):
