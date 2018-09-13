@@ -73,7 +73,7 @@ def astar(puzzle_node, solution):
 	answer = ""
 	expanded_count = 0
 
-	## FORMAT: (total manhattan distance, level, the answer)
+	## FORMAT: (total manhattan distance, level, the current state, the current answer)
 	fringe.put((0, 0, puzzle_node, ""))
 
 	while not fringe.empty():
