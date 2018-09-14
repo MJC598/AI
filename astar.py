@@ -1,5 +1,6 @@
 from queue import PriorityQueue
 from copy import deepcopy
+from time import clock
 
 def get_manhattan_distance(puzzle_node):
 
@@ -68,6 +69,7 @@ def create_tuple(puzzle_node):
 
 def astar(puzzle_node, solution):
 
+	beginning_time = clock()
 	fringe = PriorityQueue()
 	visited_nodes = set()
 	answer = ""
@@ -92,8 +94,13 @@ def astar(puzzle_node, solution):
 		if(done):
 			answer = current_answer
 			print("Expanded Count: ", expanded_count)
+			end_time = clock()
+			print("Time:", end_time-beginning_time)
 			return answer
 
+		if(expanded_count < 5):
+			print("Expanding Node Number:" , expanded_count)
+			print_node(current_state)
 		expanded_nodes = expand_node(current_state)
 
 		for node, instruction in expanded_nodes:
