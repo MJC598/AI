@@ -53,6 +53,9 @@ class Tree:
 		else:
 			nodeList = self.expand(node.state, node, problem)
 			result.count += len(nodeList)
+			if(result.count <= 5):
+				for x in nodeList:
+					self.printNode(x)
 			if(result.count >= 1000000):
 				result.value = 0
 				return result
@@ -145,7 +148,7 @@ if __name__ == '__main__':
 	goal = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]]
 	tree = Tree()
 	result = Result(-1, 0, testCase1)
-	result = tree.iterativeDeepeningSearch(testCase2, goal)
+	result = tree.iterativeDeepeningSearch(testCase1, goal)
 	# tree.printNode(result.solution)
 	end_time = datetime.datetime.now()
 	ctime = end_time - start_time
