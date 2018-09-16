@@ -7,6 +7,25 @@ Implementation of Artificial Intelligence Programs for Mizzou CMP_SC 4750
 ---
 ## Hardware / Software
 These algorithms were written for Python 3. We ran them on a MacBook Pro on macOS High Sierra with a 2.9 GHz Intel Core i5 Processor and 16 GB of Memory.
+
+## IDS
+### Implementation:
+### First Five Nodes:
+#### Test Case 1
+#### Test Case 2
+### Solution Found:
+#### Test Case 1
+#### Test Case 2
+
+## DFGS
+### Implementation:
+### First Five Nodes:
+#### Test Case 1
+#### Test Case 2
+### Solution Found:
+#### Test Case 1
+#### Test Case 2
+
 ## A*
 ### Implementation:
 
