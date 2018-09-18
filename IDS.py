@@ -24,7 +24,6 @@ class Tree:
 		result = Result(-1, 0, problem)
 		#constantly loop until solution is found
 		while(result.count < 1000000):
-			# print("while loop")
 			result = self.depthLimitedSearch(problem, goal, limit)
 			limit += 1
 			#this is the check for node otherwise continue
@@ -59,6 +58,7 @@ class Tree:
 			if(result.count >= 1000000):
 				result.value = 0
 				return result
+			#traverse list of nodes to expand recursively
 			for successor in nodeList:
 				result = self.recursiveDLS(successor, result.count, problem, goal, limit)
 				if(result.value == 0):

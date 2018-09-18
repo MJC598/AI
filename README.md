@@ -10,6 +10,46 @@ These algorithms were written for Python 3. We ran them on a MacBook Pro on macO
 
 ## IDS
 ### Implementation:
+The IDS works by continuously supplying a depth of a tree from 0 to the solution is found and restarting the built tree from each depth increase.
+The depth increase happens here:
+```python
+limit = 0
+		result = Result(-1, 0, problem)
+		#constantly loop until solution is found
+		while(result.count < 1000000):
+			result = self.depthLimitedSearch(problem, goal, limit)
+			limit += 1
+			#this is the check for node otherwise continue looping
+			if(result.value != 0):
+				return result
+```
+
+Then, a standard BFS is implemented which implements a LIFO queue, like here:
+```python
+#traverse list of nodes to expand recursively
+for successor in nodeList:
+				result = self.recursiveDLS(successor, result.count, problem, goal, limit)
+				if(result.value == 0):
+					cutoff = True
+				elif(result.value != -1):
+					return result
+```
+
+Finally, if the tree generates over 1 million nodes the IDS exits with the understanding that the tree is too big
+```python
+while(result.count < 1000000):
+	#if the while loop fails result is set to -2
+result.value = -2
+return result
+
+#where result is returned in order to indicate 1000000 nodes
+elif(result.value is -2):
+		print(result.count)
+		print(ctime.microseconds, end='')
+		print(" microseconds")
+		print("Reached 1000000 nodes program was terminated!")
+```
+
 ### First Five Nodes:
 #### Test Case 1
 ```
@@ -130,6 +170,45 @@ Reached 1000000 nodes program was terminated!
 
 ## DFGS
 ### Implementation:
+A DFGS operates as a Depth First Search on a graph. The key difference is that the graph search recognizes which nodes have already been visited. That is being done here:
+```python
+#closing nodes to recongize where the graph has already been traversed
+if node not in closed:
+	closed.append(node)
+	nodeList = self.expand(node.state, node, problem)
+```
+
+Otherwise, the same FIFO queue implmentation is still happening:
+```python
+#fringe is discovered graph
+fringe = [node]
+while(len(fringe) <= 1000000):
+	if(fringe == []):
+		result.value = -1
+		return result
+	node = fringe.pop(0)
+
+#putting nodes on fringe
+for x in nodeList:
+	fringe.append(x)
+```
+
+And the DFGS also exits after 1 million nodes, which takes substantially longer because it doesn't repeat nodes like an IDS does. That is accounted for here:
+```python
+while(len(fringe) <= 1000000):
+	#functioning code goes here
+	#this is if the result.count value hits 1 million
+	if(result.count >= 1000000):
+		result.value = -2
+		return result
+
+elif(result.value is -2):
+	print(result.count)
+	print(ctime.microseconds, end='')
+	print(" microseconds")
+	print("Reached 1000000 nodes program was terminated!")
+```
+
 ### First Five Nodes:
 #### Test Case 1
 ```

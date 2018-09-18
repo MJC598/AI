@@ -34,6 +34,7 @@ class Graph:
 				result.solution = node
 				result.value = 0
 				return result
+			#closing nodes to recongize where the graph has already been traversed
 			if node not in closed:
 				closed.append(node)
 				nodeList = self.expand(node.state, node, problem)
