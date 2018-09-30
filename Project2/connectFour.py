@@ -3,6 +3,10 @@
 if __name__ == "__main__":
     #winner_list will hold the results of all the games
     winner_list = []
+    x_win = 0
+    o_win = 0
+    ties = 0
+    player = 'p1'
     '''
         E - Empty
         X - p1
@@ -14,31 +18,41 @@ if __name__ == "__main__":
                  ['E','E','E','E','E','E'], 
                  ['E','E','E','E','E','E'], 
                  ['E','E','E','E','E','E']]
-    #initial run of the p1_minimax_tree with a clean board
-    winner, board = p1_minimax_tree(new_board)
+    #initial run of the minimax_tree with a clean board and start with p1
+    winner, board = minimax_tree(new_board, player)
     #run this 100 times to get new winners each time?
+    #return p1, p2, or tie breaks the loop
     while winner is None:
-        #since we already ran p1 we start the loop with p2
-        winner, board = p2_minimax_tree(board)
-        #if p2 is the winner, we have to break the loop so we don't continue running a p1 tree
-        if winner not None:
-            winner_list.append("p2")
-            break
-        #if p2 cannot find a winner, p1 runs
-        winner, board = p1_minimax_tree(board)
-        if winner not None:
-            #we don't need to break here because this is the end of the loop, it is done automatically
-            winner_list.append("p1")
+        #check to see who played last, alternates between p1 and p2
+        if(player == 'p1')
+            player = 'p2'
+            winner, board = minimax_tree(board, player)
+            if winner not None:
+                if winner == 'p2':
+                    winner_list.append("p2")
+                    o_win += 1
+                else:
+                    ties += 1
+                break
+        else:
+            player = 'p1'
+            winner, board = minimax_tree(board, player)
+            if winner not None:
+                if winner == 'p1':
+                    winner_list.append("p1")
+                    x_win += 1
+                else:
+                    ties += 1
     
     winner_list.append(winner)
-
-
-
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
 def heuristic(board, player):
     #initialize as neutral 0
     value = 0
+    p1_list = []
+    p2_list = []
+
     '''
         h(n) = 5*[# of 2-side open 3-in-a-row for me]
                -10*[# of 2-side open 3-in-a-row for opp]
@@ -54,21 +68,7 @@ def heuristic(board, player):
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
 #otherwise, board and blank
-def p1_minimax_tree(board):
-    player = 'p1'
-    winner = None
-    new_board = board
-    choice = heuristic(board, player)
-    new_board = update_board(board, player)
-
-    return tuple((winner, new_board))
-
-
-#same as p1_minimax_tree except this one looks ahead 4 moves (2 for opp, 2 for me)
-#if the game is over, it returns the winner and the board (in a tuple)
-#otherwise, board and blank
-def p2_minimax_tree(board):
-    player = 'p2'
+def minimax_tree(board, player):
     winner = None
     new_board = board
     choice = heuristic(board, player)
