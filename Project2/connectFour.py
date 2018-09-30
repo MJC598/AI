@@ -47,22 +47,28 @@ if __name__ == "__main__":
     winner_list.append(winner)
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
-def heuristic(board, min_max):
+def heuristic(board, player):
+    #initialize return vars
+    winner = None
     #previous moves
-    p1_list = []
-    p2_list = []
+    x_list = []
+    o_list = []
     #possible moves
-    node_list = []
+    action_list = []
 
     #fill the lists with coordinate pairs of possible moves and all previous moves
     for x in range(6):
         for y in range(6):
             if board[x][y] == 'E':
-                node_list.append(tuple(x,y))
+                action_list.append(tuple(x,y))
             elif board[x][y] == 'X':
-                p1_list.append(tuple(x,y))
+                x_list.append(tuple(x,y))
             else:
-                p2_list.append(tuple(x,y))
+                o_list.append(tuple(x,y))
+    #verify there are still possible moves on the board
+    if not action_list:
+        winner = 'tie'
+        return tuple(winner, None)
 
     '''
         h(n) = 5*[# of 2-side open 3-in-a-row for me]
@@ -74,24 +80,31 @@ def heuristic(board, min_max):
 
                use 
     '''
-    if(min_max == 'max'):
-        return max(node_list)
-    else:
-        return min(node_list)
+
+    #move is a coordinate pair tuple
+    return tuple(winner,move)
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
 #otherwise, board and blank
 def minimax_tree(board, player):
     winner = None
-
-    new_board = update_board(board, player)
+    choice = heurisitc(board, player)
+    new_board = update_board(board, player, choice)
     return tuple((winner, new_board))
 
 #updates board according to player
-def update_board(board, player):
+def update_board(board, player, choice):
+    symbol = 'E'
+    if player == 'p1':
+        symbol = 'X'
+    else:
+        symbol = 'O'
     new_board = board
-
+    for x in range(6):
+        for y in range(6):
+            if x == choice[0] and y == choice[1]:
+                new_board[x][y] = symbol
     return new_board
 
 #pretty self-explanatory, prints the board
