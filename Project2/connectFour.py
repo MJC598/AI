@@ -47,11 +47,22 @@ if __name__ == "__main__":
     winner_list.append(winner)
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
-def heuristic(board, player):
-    #initialize as neutral 0
-    value = 0
+def heuristic(board, min_max):
+    #previous moves
     p1_list = []
     p2_list = []
+    #possible moves
+    node_list = []
+
+    #fill the lists with coordinate pairs of possible moves and all previous moves
+    for x in range(6):
+        for y in range(6):
+            if board[x][y] == 'E':
+                node_list.append(tuple(x,y))
+            elif board[x][y] == 'X':
+                p1_list.append(tuple(x,y))
+            else:
+                p2_list.append(tuple(x,y))
 
     '''
         h(n) = 5*[# of 2-side open 3-in-a-row for me]
@@ -63,17 +74,18 @@ def heuristic(board, player):
 
                use 
     '''
-    return value
+    if(min_max == 'max'):
+        return max(node_list)
+    else:
+        return min(node_list)
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
 #otherwise, board and blank
 def minimax_tree(board, player):
     winner = None
-    new_board = board
-    choice = heuristic(board, player)
-    new_board = update_board(board, player)
 
+    new_board = update_board(board, player)
     return tuple((winner, new_board))
 
 #updates board according to player
