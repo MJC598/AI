@@ -20,6 +20,7 @@ def heuristic(board, player):
                 action_list.append(tuple((x,y)))
             elif board[x][y] == 'X':
                 x_list.append(tuple((x,y)))
+                check_around(board, x, y, 'X', 0)
             else:
                 o_list.append(tuple((x,y)))
     #verify there are still possible moves on the board
@@ -43,6 +44,9 @@ def heuristic(board, player):
         tail.add(active)
         active = around.pop()
 
+        or what if we count it in the initial traversal of the board? 
+            Like go up, up-right, right, right-down, down, down-left, left, left-up whenever we find an X and if there is 
+            one already continue going in the same direction. I think this might be the best way to go
 
     layout of initial board with 1st move is:
 
@@ -88,6 +92,29 @@ def heuristic(board, player):
 #
 # ************************************
 
+#check each of the squares around the active block
+def check_around(board, x, y, value, counter):
+    if(board[x-1][y] == value):
+        #left
+    elif(board[x-1][y-1] == value):
+        #left-up
+    elif(board[x][y-1] == value):
+        #up
+    elif(board[x+1][y-1] == value):
+        #up-right
+    elif(board[x+1][y] == value):
+        #right
+    elif(board[x+1][y+1] == value):
+        #right-down
+    elif(board[x][y+1] == value):
+        #down
+    elif(board[x-1][y+1] == value):
+        #left-down
+    else:
+        #returns the number of adjacent blocks
+        return counter + 1
+
+# def check_left(board, x, y, value, counter):
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
