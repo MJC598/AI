@@ -1,4 +1,6 @@
-
+from time import clock
+from copy import deepcopy
+from random import random
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
 def heuristic(board, player):
@@ -127,7 +129,9 @@ if __name__ == "__main__":
                  ['E','E','E','E','E','E'], 
                  ['E','E','E','E','E','E']]
     #initial update puts the first move for p1 in the middle of the board
-    board = update_board(new_board, player, (2,2))
+    offset1 = random(0,1)
+    offset2 = random(0,1)
+    board = update_board(new_board, player, (2+offset1,2+offset2))
     #run this 100 times to get new winners each time?
     #return p1, p2, or tie breaks the loop
     while winner is None:
