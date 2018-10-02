@@ -32,6 +32,18 @@ def heuristic(board, player):
     o_list.sort(key=lambda tup: tup[0])
     action_list.sort(key=lambda tup: tup[0])
     '''
+    what if we set it up with a sort of ring situation, where it starts in the center(2,2/3,2/2,3/3,3) and traverse out
+        on X's and O's from there? Or what if we have a 2nd array where we keep putting coordinate pairs connected to 1 we 
+        pop out of the x_list and count the number in the array? Something like:
+        tail = ()
+        active = x_list.pop()
+        around = ()
+        if around active
+            around.add
+        tail.add(active)
+        active = around.pop()
+
+
     layout of initial board with 1st move is:
 
           0 1 2 3 4 5 (*these indicies are for personal use, not actually on board)
