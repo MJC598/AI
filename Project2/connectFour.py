@@ -114,7 +114,54 @@ def check_around(board, x, y, value, counter):
         #returns the number of adjacent blocks
         return counter + 1
 
-# def check_left(board, x, y, value, counter):
+#sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
+def check_left(board, x, y, value, counter):
+    if(board[x-1][y] == value):
+        return check_left(board, x, y, value, counter)
+    else:
+        return counter + 1
+
+def check_left_up(board, x, y, value, counter):
+    if(board[x-1][y-1] == value):
+        return check_left_up(board, x, y, value, counter)
+    else:
+        return counter + 1
+
+def check_up(board, x, y, value, counter):
+    if(board[x][y-1] == value):
+        return check_up(board, x, y, value, counter)
+    else:
+        return counter + 1
+
+def check_up_right(board, x, y, value, counter):
+    if(board[x+1][y-1] == value):
+        return check_up_right(board, x, y, value, counter)
+    else:
+        return counter + 1
+
+def check_right(board, x, y, value, counter):
+    if(board[x+1][y] == value):
+        return check_right(board, x, y, value, counter)
+    else:
+        return counter + 1
+
+def check_right_down(board, x, y, value, counter):
+    if(board[x+1][y+1] == value):
+        return check_right_down(board, x, y, value, counter)
+    else:
+        return counter + 1
+
+def check_down(board, x, y, value, counter):
+    if(board[x][y+1] == value):
+        return check_down(board, x, y, value, counter)
+    else:
+        return counter + 1
+
+def check_down_left(board, x, y, value, counter):
+    if(board[x-1][y+1] == value):
+        return check_down_left(board, x, y, value, counter)
+    else:
+        return counter + 1
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
