@@ -20,9 +20,16 @@ def heuristic(board, player):
                 action_list.append(tuple((x,y)))
             elif board[x][y] == 'X':
                 x_list.append(tuple((x,y)))
-                check_around(board, x, y, 'X', 0)
+                x_check_value = check_around(board, x, y, 'X', 0)
+                if(x_check_value == 4):
+                    winner = 'p1'
+                    return tuple((winner, None))
             else:
                 o_list.append(tuple((x,y)))
+                y_check_value = check_around(board, x, y, 'O', 0)
+                if(y_check_value == 4):
+                    winner = 'p2'
+                    return tuple((winner, None))
     #verify there are still possible moves on the board
     if not action_list:
         winner = 'tie'
@@ -96,20 +103,28 @@ def heuristic(board, player):
 def check_around(board, x, y, value, counter):
     if(board[x-1][y] == value):
         #left
+        return 1+check_left(board, x, y, value, counter)
     elif(board[x-1][y-1] == value):
         #left-up
+        return 1+check_left_up(board, x, y, value, counter)
     elif(board[x][y-1] == value):
         #up
+        return 1+check_up(board, x, y, value, counter)
     elif(board[x+1][y-1] == value):
         #up-right
+        return 1+check_up_right(board, x, y, value, counter)
     elif(board[x+1][y] == value):
         #right
+        return 1+check_right(board, x, y, value, counter)
     elif(board[x+1][y+1] == value):
         #right-down
+        return 1+check_right_down(board, x, y, value, counter)
     elif(board[x][y+1] == value):
         #down
+        return 1+check_down(board, x, y, value, counter)
     elif(board[x-1][y+1] == value):
         #left-down
+        return 1+check_down_left(board, x, y, value, counter)
     else:
         #returns the number of adjacent blocks
         return counter + 1
