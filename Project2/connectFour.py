@@ -20,13 +20,13 @@ def heuristic(board, player):
                 action_list.append(tuple((x,y)))
             elif board[x][y] == 'X':
                 x_list.append(tuple((x,y)))
-                x_check_value = check_around(board, x, y, 'X', 0)
+                x_check_value = check_around(board, x, y, 'X')
                 if(x_check_value == 4):
                     winner = 'p1'
                     return tuple((winner, None))
             else:
                 o_list.append(tuple((x,y)))
-                y_check_value = check_around(board, x, y, 'O', 0)
+                y_check_value = check_around(board, x, y, 'O')
                 if(y_check_value == 4):
                     winner = 'p2'
                     return tuple((winner, None))
@@ -100,83 +100,83 @@ def heuristic(board, player):
 # ************************************
 
 #check each of the squares around the active block
-def check_around(board, x, y, value, counter):
-    if(x not 0 or board[x-1][y] == value):
+def check_around(board, x, y, value):
+    if(x != 0 or board[x-1][y] == value):
         #left
-        return 1+check_left(board, x-1, y, value, counter)
-    elif(x not 0 or y not 0 or board[x-1][y-1] == value):
+        return 1+check_left(board, x-1, y, value)
+    elif(x != 0 or y != 0 or board[x-1][y-1] == value):
         #left-up
-        return 1+check_left_up(board, x-1, y-1, value, counter)
-    elif(y not 0 or board[x][y-1] == value):
+        return 1+check_left_up(board, x-1, y-1, value)
+    elif(y != 0 or board[x][y-1] == value):
         #up
-        return 1+check_up(board, x, y-1, value, counter)
-    elif(x not 6 or y not 0 or board[x+1][y-1] == value):
+        return 1+check_up(board, x, y-1, value)
+    elif(x != 6 or y != 0 or board[x+1][y-1] == value):
         #up-right
-        return 1+check_up_right(board, x+1, y-1, value, counter)
-    elif(x not 6 or board[x+1][y] == value):
+        return 1+check_up_right(board, x+1, y-1, value)
+    elif(x != 6 or board[x+1][y] == value):
         #right
-        return 1+check_right(board, x+1, y, value, counter)
-    elif(x not 6 or y not 6 or board[x+1][y+1] == value):
+        return 1+check_right(board, x+1, y, value)
+    elif(x != 6 or y != 6 or board[x+1][y+1] == value):
         #right-down
-        return 1+check_right_down(board, x+1, y+1, value, counter)
-    elif(y not 6 or board[x][y+1] == value):
+        return 1+check_right_down(board, x+1, y+1, value)
+    elif(y != 6 or board[x][y+1] == value):
         #down
-        return 1+check_down(board, x, y+1, value, counter)
-    elif(x not 0 or y not 6 or board[x-1][y+1] == value):
+        return 1+check_down(board, x, y+1, value)
+    elif(x != 0 or y != 6 or board[x-1][y+1] == value):
         #left-down
-        return 1+check_down_left(board, x-1, y+1, value, counter)
+        return 1+check_down_left(board, x-1, y+1, value)
     else:
         #returns the number of adjacent blocks
-        return counter + 1
+        return 1
 
 #sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
-def check_left(board, x, y, value, counter):
-    if(x not 0 or board[x-1][y] == value):
-        return check_left(board, x-1, y, value, counter)
+def check_left(board, x, y, value):
+    if(x != 0 or board[x-1][y] == value):
+        return 1 + check_left(board, x-1, y, value)
     else:
-        return counter + 1
+        return 0
 
-def check_left_up(board, x, y, value, counter):
-    if(x not 0 or y not 0 or board[x-1][y-1] == value):
-        return check_left_up(board, x-1, y-1, value, counter)
+def check_left_up(board, x, y, value):
+    if(x != 0 or y != 0 or board[x-1][y-1] == value):
+        return 1 + check_left_up(board, x-1, y-1, value)
     else:
-        return counter + 1
+        return 0
 
-def check_up(board, x, y, value, counter):
-    if(y not 0 or board[x][y-1] == value):
-        return check_up(board, x, y-1, value, counter)
+def check_up(board, x, y, value):
+    if(y != 0 or board[x][y-1] == value):
+        return 1 + check_up(board, x, y-1, value)
     else:
-        return counter + 1
+        return 0
 
-def check_up_right(board, x, y, value, counter):
-    if(x not 6 or y not 0 or board[x+1][y-1] == value):
-        return check_up_right(board, x+1, y-1, value, counter)
+def check_up_right(board, x, y, value):
+    if(x != 6 or y != 0 or board[x+1][y-1] == value):
+        return 1 + check_up_right(board, x+1, y-1, value)
     else:
-        return counter + 1
+        return 0
 
-def check_right(board, x, y, value, counter):
-    if(x not 6 or board[x+1][y] == value):
-        return check_right(board, x+1, y, value, counter)
+def check_right(board, x, y, value):
+    if(x != 6 or board[x+1][y] == value):
+        return 1 + check_right(board, x+1, y, value)
     else:
-        return counter + 1
+        return 0
 
-def check_right_down(board, x, y, value, counter):
-    if(x not 6 or y not 6 or board[x+1][y+1] == value):
-        return check_right_down(board, x+1, y+1, value, counter)
+def check_right_down(board, x, y, value):
+    if(x != 6 or y != 6 or board[x+1][y+1] == value):
+        return 1 + check_right_down(board, x+1, y+1, value)
     else:
-        return counter + 1
+        return 0
 
-def check_down(board, x, y, value, counter):
-    if(y not 6 or board[x][y+1] == value):
-        return check_down(board, x, y+1, value, counter)
+def check_down(board, x, y, value):
+    if(y != 6 or board[x][y+1] == value):
+        return 1 + check_down(board, x, y+1, value)
     else:
-        return counter + 1
+        return 0
 
-def check_down_left(board, x, y, value, counter):
-    if(x not 0 or y not 6 or board[x-1][y+1] == value):
-        return check_down_left(board, x-1, y+1, value, counter)
+def check_down_left(board, x, y, value):
+    if(x != 0 or y != 6 or board[x-1][y+1] == value):
+        return 1 + check_down_left(board, x-1, y+1, value)
     else:
-        return counter + 1
+        return 0
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
