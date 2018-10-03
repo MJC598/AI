@@ -1,6 +1,7 @@
 from time import clock
 from copy import deepcopy
 from random import random
+from heuristic import *
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
 def heuristic(board, player):
@@ -100,83 +101,83 @@ def heuristic(board, player):
 # ************************************
 
 #check each of the squares around the active block
-def check_around(board, x, y, value):
-    if(x != 0 or board[x-1][y] == value):
-        #left
-        return 1+check_left(board, x-1, y, value)
-    elif(x != 0 or y != 0 or board[x-1][y-1] == value):
-        #left-up
-        return 1+check_left_up(board, x-1, y-1, value)
-    elif(y != 0 or board[x][y-1] == value):
-        #up
-        return 1+check_up(board, x, y-1, value)
-    elif(x != 6 or y != 0 or board[x+1][y-1] == value):
-        #up-right
-        return 1+check_up_right(board, x+1, y-1, value)
-    elif(x != 6 or board[x+1][y] == value):
-        #right
-        return 1+check_right(board, x+1, y, value)
-    elif(x != 6 or y != 6 or board[x+1][y+1] == value):
-        #right-down
-        return 1+check_right_down(board, x+1, y+1, value)
-    elif(y != 6 or board[x][y+1] == value):
-        #down
-        return 1+check_down(board, x, y+1, value)
-    elif(x != 0 or y != 6 or board[x-1][y+1] == value):
-        #left-down
-        return 1+check_down_left(board, x-1, y+1, value)
-    else:
-        #returns the number of adjacent blocks
-        return 1
+# def check_around(board, x, y, value):
+#     if(x != 0 or board[x-1][y] == value):
+#         #left
+#         return 1+check_left(board, x-1, y, value)
+#     elif(x != 0 or y != 0 or board[x-1][y-1] == value):
+#         #left-up
+#         return 1+check_left_up(board, x-1, y-1, value)
+#     elif(y != 0 or board[x][y-1] == value):
+#         #up
+#         return 1+check_up(board, x, y-1, value)
+#     elif(x != 6 or y != 0 or board[x+1][y-1] == value):
+#         #up-right
+#         return 1+check_up_right(board, x+1, y-1, value)
+#     elif(x != 6 or board[x+1][y] == value):
+#         #right
+#         return 1+check_right(board, x+1, y, value)
+#     elif(x != 6 or y != 6 or board[x+1][y+1] == value):
+#         #right-down
+#         return 1+check_right_down(board, x+1, y+1, value)
+#     elif(y != 6 or board[x][y+1] == value):
+#         #down
+#         return 1+check_down(board, x, y+1, value)
+#     elif(x != 0 or y != 6 or board[x-1][y+1] == value):
+#         #left-down
+#         return 1+check_down_left(board, x-1, y+1, value)
+#     else:
+#         #returns the number of adjacent blocks
+#         return 1
 
-#sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
-def check_left(board, x, y, value):
-    if(x != 0 or board[x-1][y] == value):
-        return 1 + check_left(board, x-1, y, value)
-    else:
-        return 0
+# #sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
+# def check_left(board, x, y, value):
+#     if(x != 0 or board[x-1][y] == value):
+#         return 1 + check_left(board, x-1, y, value)
+#     else:
+#         return 0
 
-def check_left_up(board, x, y, value):
-    if(x != 0 or y != 0 or board[x-1][y-1] == value):
-        return 1 + check_left_up(board, x-1, y-1, value)
-    else:
-        return 0
+# def check_left_up(board, x, y, value):
+#     if(x != 0 or y != 0 or board[x-1][y-1] == value):
+#         return 1 + check_left_up(board, x-1, y-1, value)
+#     else:
+#         return 0
 
-def check_up(board, x, y, value):
-    if(y != 0 or board[x][y-1] == value):
-        return 1 + check_up(board, x, y-1, value)
-    else:
-        return 0
+# def check_up(board, x, y, value):
+#     if(y != 0 or board[x][y-1] == value):
+#         return 1 + check_up(board, x, y-1, value)
+#     else:
+#         return 0
 
-def check_up_right(board, x, y, value):
-    if(x != 6 or y != 0 or board[x+1][y-1] == value):
-        return 1 + check_up_right(board, x+1, y-1, value)
-    else:
-        return 0
+# def check_up_right(board, x, y, value):
+#     if(x != 6 or y != 0 or board[x+1][y-1] == value):
+#         return 1 + check_up_right(board, x+1, y-1, value)
+#     else:
+#         return 0
 
-def check_right(board, x, y, value):
-    if(x != 6 or board[x+1][y] == value):
-        return 1 + check_right(board, x+1, y, value)
-    else:
-        return 0
+# def check_right(board, x, y, value):
+#     if(x != 6 or board[x+1][y] == value):
+#         return 1 + check_right(board, x+1, y, value)
+#     else:
+#         return 0
 
-def check_right_down(board, x, y, value):
-    if(x != 6 or y != 6 or board[x+1][y+1] == value):
-        return 1 + check_right_down(board, x+1, y+1, value)
-    else:
-        return 0
+# def check_right_down(board, x, y, value):
+#     if(x != 6 or y != 6 or board[x+1][y+1] == value):
+#         return 1 + check_right_down(board, x+1, y+1, value)
+#     else:
+#         return 0
 
-def check_down(board, x, y, value):
-    if(y != 6 or board[x][y+1] == value):
-        return 1 + check_down(board, x, y+1, value)
-    else:
-        return 0
+# def check_down(board, x, y, value):
+#     if(y != 6 or board[x][y+1] == value):
+#         return 1 + check_down(board, x, y+1, value)
+#     else:
+#         return 0
 
-def check_down_left(board, x, y, value):
-    if(x != 0 or y != 6 or board[x-1][y+1] == value):
-        return 1 + check_down_left(board, x-1, y+1, value)
-    else:
-        return 0
+# def check_down_left(board, x, y, value):
+#     if(x != 0 or y != 6 or board[x-1][y+1] == value):
+#         return 1 + check_down_left(board, x-1, y+1, value)
+#     else:
+#         return 0
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
