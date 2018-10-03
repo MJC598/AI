@@ -1,6 +1,4 @@
 BOARD_DIM = 6
-P1_CHAR = 'X'
-P2_CHAR = 'O'
 EMPTY_CHAR = 'E'
 
 """
