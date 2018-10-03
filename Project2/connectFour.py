@@ -103,28 +103,28 @@ def heuristic(board, player):
 def check_around(board, x, y, value, counter):
     if(x not 0 or board[x-1][y] == value):
         #left
-        return 1+check_left(board, x, y, value, counter)
+        return 1+check_left(board, x-1, y, value, counter)
     elif(x not 0 or y not 0 or board[x-1][y-1] == value):
         #left-up
-        return 1+check_left_up(board, x, y, value, counter)
+        return 1+check_left_up(board, x-1, y-1, value, counter)
     elif(y not 0 or board[x][y-1] == value):
         #up
-        return 1+check_up(board, x, y, value, counter)
+        return 1+check_up(board, x, y-1, value, counter)
     elif(x not 6 or y not 0 or board[x+1][y-1] == value):
         #up-right
-        return 1+check_up_right(board, x, y, value, counter)
+        return 1+check_up_right(board, x+1, y-1, value, counter)
     elif(x not 6 or board[x+1][y] == value):
         #right
-        return 1+check_right(board, x, y, value, counter)
+        return 1+check_right(board, x+1, y, value, counter)
     elif(x not 6 or y not 6 or board[x+1][y+1] == value):
         #right-down
-        return 1+check_right_down(board, x, y, value, counter)
+        return 1+check_right_down(board, x+1, y+1, value, counter)
     elif(y not 6 or board[x][y+1] == value):
         #down
-        return 1+check_down(board, x, y, value, counter)
+        return 1+check_down(board, x, y+1, value, counter)
     elif(x not 0 or y not 6 or board[x-1][y+1] == value):
         #left-down
-        return 1+check_down_left(board, x, y, value, counter)
+        return 1+check_down_left(board, x-1, y+1, value, counter)
     else:
         #returns the number of adjacent blocks
         return counter + 1
@@ -132,49 +132,49 @@ def check_around(board, x, y, value, counter):
 #sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
 def check_left(board, x, y, value, counter):
     if(x not 0 or board[x-1][y] == value):
-        return check_left(board, x, y, value, counter)
+        return check_left(board, x-1, y, value, counter)
     else:
         return counter + 1
 
 def check_left_up(board, x, y, value, counter):
     if(x not 0 or y not 0 or board[x-1][y-1] == value):
-        return check_left_up(board, x, y, value, counter)
+        return check_left_up(board, x-1, y-1, value, counter)
     else:
         return counter + 1
 
 def check_up(board, x, y, value, counter):
     if(y not 0 or board[x][y-1] == value):
-        return check_up(board, x, y, value, counter)
+        return check_up(board, x, y-1, value, counter)
     else:
         return counter + 1
 
 def check_up_right(board, x, y, value, counter):
     if(x not 6 or y not 0 or board[x+1][y-1] == value):
-        return check_up_right(board, x, y, value, counter)
+        return check_up_right(board, x+1, y-1, value, counter)
     else:
         return counter + 1
 
 def check_right(board, x, y, value, counter):
     if(x not 6 or board[x+1][y] == value):
-        return check_right(board, x, y, value, counter)
+        return check_right(board, x+1, y, value, counter)
     else:
         return counter + 1
 
 def check_right_down(board, x, y, value, counter):
     if(x not 6 or y not 6 or board[x+1][y+1] == value):
-        return check_right_down(board, x, y, value, counter)
+        return check_right_down(board, x+1, y+1, value, counter)
     else:
         return counter + 1
 
 def check_down(board, x, y, value, counter):
     if(y not 6 or board[x][y+1] == value):
-        return check_down(board, x, y, value, counter)
+        return check_down(board, x, y+1, value, counter)
     else:
         return counter + 1
 
 def check_down_left(board, x, y, value, counter):
     if(x not 0 or y not 6 or board[x-1][y+1] == value):
-        return check_down_left(board, x, y, value, counter)
+        return check_down_left(board, x-1, y+1, value, counter)
     else:
         return counter + 1
 
