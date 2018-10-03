@@ -4,7 +4,7 @@ from random import random
 from heuristic import *
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
-def heuristic(board, player):
+def minimax_exec(board, player):
     #initialize return vars
     winner = None
     #previous moves (list of coordinate pairs)
@@ -40,6 +40,19 @@ def heuristic(board, player):
     x_list.sort(key=lambda tup: tup[0])
     o_list.sort(key=lambda tup: tup[0])
     action_list.sort(key=lambda tup: tup[0])
+
+    h_value_list = []
+
+    for x in action_list:
+        #call function in heurisitc.py to get list of heuristics and run minimax on it
+        h_value_list.append(heuristic( ))
+
+
+    # max(h_value_list)
+    # min(h_value_list)
+
+
+    
     '''
     what if we set it up with a sort of ring situation, where it starts in the center(2,2/3,2/2,3/3,3) and traverse out
         on X's and O's from there? Or what if we have a 2nd array where we keep putting coordinate pairs connected to 1 we 
@@ -184,7 +197,7 @@ def heuristic(board, player):
 #otherwise, board and blank
 def minimax_tree(board, player):
     winner = None
-    winner, choice = heurisitc(board, player)
+    winner, choice = minimax_exec(board, player)
     if choice is None:
         return tuple((winner, board))
     new_board = update_board(board, player, choice)
