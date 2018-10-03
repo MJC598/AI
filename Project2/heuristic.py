@@ -263,3 +263,69 @@ def check_diagonal_up(x, y, board, player_char, opp_char):
 			return 2, coordinate_list
 		elif empty_space_count == 2:
 			return 1, coordinate_list
+
+def populate_lists(x,y, board, player_char, opp_char, three_two_open, three_one_open, two_open, check_function):
+
+	case, coordinates = check_function(x, y, player_char, opp_char)
+
+	if coordinates:
+		if case == 1:
+			if coordinates not in player_three_two_open:
+				player_three_two_open.append(coordinates)
+
+		elif case == 2:
+			if coordinates not in player_three_one_open:
+				player_three_one_open.apend(coordinates)
+
+		elif case == 3:
+			if coordinates not in player_two_open:
+				player_two_open.append(coordinates)
+
+def heuristic(x, y, board, player_char, opp_char):
+
+	player_three_two_open = []
+	player_three_one_open = []
+	player_two_open = []
+
+	opponent_three_two_open = []
+	opponent_three_one_open = []
+	opponent_two_open = []
+
+	for i in range(BOARD_DIM):
+		for j in range(BOARD_DIM):
+
+			if board[i][j] == EMPTY_CHAR:
+				continue
+
+			elif board[i][j] == player_char:
+				# Vertical Check
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_vertical)
+				# Horizontal Check
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_horizontal)
+				# Check Diagonal
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_diagonal_up)
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_diagonal_down)
+
+			elif board[i][j] == opp_char:
+				# Vertical Check
+				populate_lists(i, j, board, opponent_char, opp_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_vertical)
+				# Horizontal Check
+				populate_lists(i, j, board, opponent_char, opp_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_horizontal)
+				# Check Diagonal
+				populate_lists(i, j, board, opponent_char, opp_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_diagonal_up)
+				populate_lists(i, j, board, opponent_char, opp_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_diagonal_down)
+
+
+
+
+	p_tto = len(player_three_two_open)
+	p_too = len(player_three_one_open)
+	p_to = len(player_two_open)
+
+	o_tto = len(opponent_three_two_open)
+	o_too = len(opponent_three_one_open)
+	o_to = len(opponent_two_open)
+
+	heuristic = (5 * p_tto) - (10 * o_tto) + (3 * p_too) - (6 * o_too) + p_to - o_to
+
+	return heuristic
