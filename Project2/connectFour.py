@@ -237,7 +237,7 @@ if __name__ == "__main__":
     #return p1, p2, or tie breaks the loop
     while winner is None:
         #check to see who played last, alternates between p1 and p2
-        if(player == 'p1')
+        if(player == 'p1'):
             player = 'p2'
             winner, board = minimax_tree(board, player)
             if winner not None:
