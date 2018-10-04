@@ -26,7 +26,7 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     # print_board(board)
     # print_board(temp_board)
     #returns the max of the min value and the correct move
-    choice = min_value(action_list, temp_board, player_symbol, opponent_symbol, 0)
+    choice = max_value(action_list, temp_board, player_symbol, opponent_symbol, 0)
     if choice[0] == 1000000000:
         winner = 'p1'
     elif choice[0] == -1000000000:
@@ -34,7 +34,7 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     move = choice[1]
     # print_board(board)
 
-    print(move)
+    print(choice)
     action_list.remove(move)
     if player_symbol == 'X':
         x_list.append(move)
@@ -54,7 +54,7 @@ def min_value(action_list, board, player_char, opp_char, increment):
     value_list = []
     if player_char == 'X':
         # print('p1 min')
-        if increment == 2:
+        if increment == 1:
             value_list = []
             for action in action_list:
                 # print('hey, im in the min_value but p1')
@@ -67,7 +67,7 @@ def min_value(action_list, board, player_char, opp_char, increment):
             return min(value_list)
     else:
         # print('p2 min')
-        if increment == 4:
+        if increment == 3:
             value_list = []
             for action in action_list:
                 value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
@@ -85,7 +85,7 @@ def max_value(action_list, board, player_char, opp_char, increment):
     value_list = []
     if player_char == 'X':
         # print('p1 max')
-        if increment == 2:
+        if increment == 1:
             value_list = []
             for action in action_list:
                 # print('hey, im in the max_value, but p1')
@@ -98,7 +98,7 @@ def max_value(action_list, board, player_char, opp_char, increment):
             return max(value_list)
     else:
         # print('p2 max')
-        if increment == 4:
+        if increment == 3:
             value_list = []
             for action in action_list:
                 # print('hey, im in the max value, but p2')
