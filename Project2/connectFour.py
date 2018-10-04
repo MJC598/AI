@@ -16,13 +16,14 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     #initialize return vars
     winner = None
     #verify there are still possible moves on the board
+    print(action_list)
     if not action_list:
         winner = 'tie'
         return tuple((winner, None))
 
     h_value_list = []
     temp_board = deepcopy(board)
-    print_board(board)
+    # print_board(board)
     # print_board(temp_board)
     #returns the max of the min value and the correct move
     choice = min_value(action_list, temp_board, player_symbol, opponent_symbol, 0)
@@ -31,7 +32,7 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     elif choice[0] == -1000000000:
         winner = 'p2'
     move = choice[1]
-    print_board(board)
+    # print_board(board)
 
     print(move)
     action_list.remove(move)
@@ -126,9 +127,10 @@ def update_board(board, player, choice):
     symbol = 'X'
     if player == 'p2':
         symbol = 'O'
+    new_board = deepcopy(board)
     #Change board spot out with the appropriate symbol
-    board[choice[0]][choice[1]] = symbol
-    return board
+    new_board[choice[0]][choice[1]] = symbol
+    return new_board
 
 #pretty self-explanatory, prints the board
 def print_board(board):
@@ -193,5 +195,6 @@ if __name__ == "__main__":
                 else:
                     ties += 1
     winner_list.append(winner)
+    print(winner)
     #print victory board
     print_board(board)
