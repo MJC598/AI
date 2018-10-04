@@ -4,7 +4,7 @@ Implementation of Artificial Intelligence Programs for Mizzou CMP_SC 4750
 ## Members
 * Matthew Carroll
 * David Huangal
----
+
 ## Hardware / Software
 These algorithms were written for Python 3. We ran them on a MacBook Pro on macOS High Sierra with a 2.9 GHz Intel Core i5 Processor and 16 GB of Memory.
 
@@ -42,11 +42,44 @@ after this call, it unwinds the recursion and gives the correct move.
 
 #### First Five Boards
 
-A little caveat, since the first move is randomized to one of the four middle nodes, it can change the rest of the nodes.
+A little caveat, since the first move is randomized to one of the four middle nodes, it can change the rest of the nodes. Also, the algorithm takes a while to work on the p2 choices and when p2 goes first it works significantly faster. 
 
 ```
-
-
+E E E E E E 
+E E E E E E 
+E E X E E E 
+E E E E E E 
+E E E E E E 
+E E E E E E 
+------------------
+E E E E E E 
+E E E E E E 
+E E X E E E 
+E E E E E E 
+E E E E E E 
+E E E E E O 
+------------------
+E E E E E E 
+E X E E E E 
+E E X E E E 
+E E E E E E 
+E E E E E E 
+E E E E E O 
+------------------
+E E E E E E 
+E X E E E E 
+E E X E E E 
+E E E E E E 
+E E E E E E 
+E E E E O O 
+------------------
+E E E E E E 
+E X E E E E 
+E E X E E E 
+E E E E E E 
+E E E E E E 
+E E E X O O 
+------------------
 ```
 
 
