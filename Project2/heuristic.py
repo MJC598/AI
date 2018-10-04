@@ -59,18 +59,24 @@ def check_vertical(x, y, board, player_char, opp_char):
 
 	# Sort the list by the x coordinate
 	coordinate_list = sorted(coordinate_list, key=lambda coord: coord[0])
-
+	# print(vertical_char_count)
+	# print(empty_space_count)
 	if vertical_char_count <= 1 or empty_space_count == 0:
+		# print(1)
 		coordinate_list = []
+		# print('return')
 		return 0, coordinate_list
 
 	elif vertical_char_count == 2:
+		# print('return')
 		return 3, coordinate_list
 
-	elif vertical_char_count == 3:
-		if empty_space_count == 1:
+	elif vertical_char_count == 3 or vertical_char_count >= 4:
+		if empty_space_count == 1 and vertical_char_count < 4:
+			# print('return')
 			return 2, coordinate_list
-		elif empty_space_count == 2:
+		elif empty_space_count == 2 or vertical_char_count >= 4:
+			# print('return')
 			return 1, coordinate_list
 
 def check_horizontal(x, y, board, player_char, opp_char):
@@ -127,10 +133,10 @@ def check_horizontal(x, y, board, player_char, opp_char):
 	elif horizontal_char_count == 2:
 		return 3, coordinate_list
 
-	elif horizontal_char_count == 3:
-		if empty_space_count == 1:
+	elif horizontal_char_count == 3 or horizontal_char_count >= 4:
+		if empty_space_count == 1 and horizontal_char_count < 4:
 			return 2, coordinate_list
-		elif empty_space_count == 2:
+		elif empty_space_count == 2 or horizontal_char_count >= 4:
 			return 1, coordinate_list
 
 def check_diagonal_down(x, y, board, player_char, opp_char):
@@ -191,10 +197,10 @@ def check_diagonal_down(x, y, board, player_char, opp_char):
 	elif diagonal_char_count == 2:
 		return 3, coordinate_list
 
-	elif diagonal_char_count == 3:
-		if empty_space_count == 1:
+	elif diagonal_char_count == 3 or diagonal_char_count >= 4:
+		if empty_space_count == 1 and diagonal_char_count < 4:
 			return 2, coordinate_list
-		elif empty_space_count == 2:
+		elif empty_space_count == 2 or diagonal_char_count >= 4:
 			return 1, coordinate_list
 
 
@@ -256,10 +262,10 @@ def check_diagonal_up(x, y, board, player_char, opp_char):
 	elif diagonal_char_count == 2:
 		return 3, coordinate_list
 
-	elif diagonal_char_count == 3:
-		if empty_space_count == 1:
+	elif diagonal_char_count == 3 or diagonal_char_count >= 4:
+		if empty_space_count == 1 and diagonal_char_count < 4:
 			return 2, coordinate_list
-		elif empty_space_count == 2:
+		elif empty_space_count == 2 or diagonal_char_count >= 4:
 			return 1, coordinate_list
 
 def populate_lists(x,y, board, player_char, opp_char, three_two_open, three_one_open, two_open, check_function):
