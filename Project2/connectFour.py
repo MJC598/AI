@@ -30,7 +30,7 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     move = choice[1]
     # print_board(board)
 
-    print(choice)
+    # print(choice)
     action_list.remove(move)
     if not action_list:
         winner = 'tie'
@@ -52,7 +52,7 @@ def min_value(action_list, board, player_char, player_win, opp_win, opp_char, in
     total_nodes = 0
     value_list = []
     if player_char == 'X':
-        # print('p1 min')
+        player = 'p1'
         if increment == 1:
             value_list = []
             for action in action_list:
@@ -69,7 +69,7 @@ def min_value(action_list, board, player_char, player_win, opp_win, opp_char, in
                 total_nodes += n
             return min(value_list), total_nodes
     else:
-        # print('p2 min')
+        player = 'p2'
         if increment == 3:
             value_list = []
             for action in action_list:
@@ -92,7 +92,7 @@ def max_value(action_list, board, player_char, player_win, opp_win, opp_char, in
     total_nodes = 0
     value_list = []
     if player_char == 'X':
-        # print('p1 max')
+        player = 'p1'
         if increment == 1:
             value_list = []
             for action in action_list:
@@ -108,7 +108,7 @@ def max_value(action_list, board, player_char, player_win, opp_win, opp_char, in
                 total_nodes += n
             return max(value_list), total_nodes
     else:
-        # print('p2 max')
+        player = 'p2'
         if increment == 3:
             value_list = []
             for action in action_list:
@@ -146,6 +146,7 @@ def update_board(board, player, choice):
     new_board[choice[0]][choice[1]] = symbol
     return new_board
 
+#checks to see if the board has a row of 4 to end the game
 def check_board(board):
     player = 'E'
     counter = 1

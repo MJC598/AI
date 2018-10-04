@@ -47,45 +47,97 @@ A little caveat, since the first move is randomized to one of the four middle no
 ```
 E E E E E E 
 E E E E E E 
-E E X E E E 
+E E E X E E 
 E E E E E E 
 E E E E E E 
 E E E E E E 
 ------------------
+Time:  7.155565096309017e-05
+E E E E E E 
+E O E E E E 
+E E E X E E 
 E E E E E E 
 E E E E E E 
-E E X E E E 
 E E E E E E 
-E E E E E E 
-E E E E E O 
 ------------------
+Time:  89.64820397538307
+Total Nodes:  48904880
 E E E E E E 
-E X E E E E 
-E E X E E E 
+E O E E E E 
+E E E X E E 
+E E E E X E 
 E E E E E E 
 E E E E E E 
-E E E E E O 
 ------------------
+Time:  0.23334120001049996
+Total Nodes:  33540
 E E E E E E 
-E X E E E E 
-E E X E E E 
+E O O E E E 
+E E E X E E 
+E E E E X E 
 E E E E E E 
 E E E E E E 
-E E E E O O 
 ------------------
+Time:  90.49346554684294
+Total Nodes:  60935035
 E E E E E E 
-E X E E E E 
-E E X E E E 
+E O O E E E 
+E E E X X E 
+E E E E X E 
 E E E E E E 
 E E E E E E 
-E E E X O O 
 ------------------
+Time:  0.23082564110086423
+Total Nodes:  50496
 ```
 
 
 #### Turned Around (P2 plays first)
 
 ```
-
+E E E E E E 
+E E E E E E 
+E E E O E E 
+E E E E E E 
+E E E E E E 
+E E E E E E 
+------------------
+Time:  8.266677688903585e-05
+E E E E E E 
+E X E E E E 
+E E E O E E 
+E E E E E E 
+E E E E E E 
+E E E E E E 
+------------------
+Time:  0.24157454432161465
+Total Nodes:  24716
+E E E E E E 
+E X E E E E 
+E E E O E E 
+E E E O E E 
+E E E E E E 
+E E E E E E 
+------------------
+Time:  93.14534597157241
+Total Nodes:  56533764
+E E E E E E 
+E X X E E E 
+E E E O E E 
+E E E O E E 
+E E E E E E 
+E E E E E E 
+------------------
+Time:  0.2249718555180209
+Total Nodes:  42021
+E E E E E E 
+E X X E E E 
+E E E O O E 
+E E E O E E 
+E E E E E E 
+E E E E E E 
+------------------
+Time:  87.31239863875373
+Total Nodes:  66671180
 
 ```
