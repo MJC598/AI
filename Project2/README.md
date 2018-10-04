@@ -9,7 +9,7 @@ Implementation of Artificial Intelligence Programs for Mizzou CMP_SC 4750
 These algorithms were written for Python 3. We ran them on a MacBook Pro on macOS High Sierra with a 2.9 GHz Intel Core i5 Processor and 16 GB of Memory.
 
 ### Connect 4 AI with Minimax Tree Implementation
-
+---
 #### Heuristic Implementation
 
 The heuristic function matches the one specified for us. We traverse the graph looking for groups of 'X's and check to see if they have openings on the ends. If it does it adds it to the appropriate list and gets the total number by taking the length of the list. It then uses these totals in the heuristic function to get a value.
@@ -41,6 +41,8 @@ value, nodes = heuristic(action[0], action[1], update_board(temp_board, player, 
 after this call, it unwinds the recursion and gives the correct move.
 
 #### First Five Boards
+
+A little caveat, since the first move is randomized to one of the four middle nodes, it can change the rest of the nodes.
 
 ```
 
