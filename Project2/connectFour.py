@@ -49,13 +49,15 @@ def minimax_exec(board, player):
 
     h_value_list = []
 
-    temp_board = board.copy()
+    temp_board = deepcopy(board)
     print_board(board)
     # print_board(temp_board)
     #returns the max of the min value and the correct move
     choice = min_value(action_list, temp_board, player_symbol, opponent_symbol, 0)
     move = choice[1]
     print_board(board)
+
+    print(move)
 
     #move is a coordinate pair tuple
     return tuple((winner,move))
@@ -67,6 +69,7 @@ def minimax_exec(board, player):
 # ************************************
 
 def min_value(action_list, board, player_char, opp_char, increment):
+    temp_board = deepcopy(board)
     value_list = []
     if player_char == 'X':
         # print('p1 min')
@@ -74,29 +77,30 @@ def min_value(action_list, board, player_char, opp_char, increment):
             value_list = []
             for action in action_list:
                 # print('hey, im in the min_value but p1')
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
             return min(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(max_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+                value_list.append(max_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
             return min(value_list)
     else:
         # print('p2 min')
         if increment == 4:
             value_list = []
             for action in action_list:
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
             return min(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(max_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+                value_list.append(max_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
             return min(value_list)
 
 
 
 def max_value(action_list, board, player_char, opp_char, increment):
+    temp_board = deepcopy(board)
     value_list = []
     if player_char == 'X':
         # print('p1 max')
@@ -104,12 +108,12 @@ def max_value(action_list, board, player_char, opp_char, increment):
             value_list = []
             for action in action_list:
                 # print('hey, im in the max_value, but p1')
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
             return max(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(min_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+                value_list.append(min_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
             return max(value_list)
     else:
         # print('p2 max')
@@ -117,12 +121,12 @@ def max_value(action_list, board, player_char, opp_char, increment):
             value_list = []
             for action in action_list:
                 # print('hey, im in the max value, but p2')
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
             return max(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(min_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+                value_list.append(min_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
             return max(value_list)
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
