@@ -65,7 +65,7 @@ def min_value(action_list, board, player_char, player_win, opp_win, opp_char, in
             value_list = []
             for action in action_list:
                 mval, n = max_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1)
-                value_list.append(mval)
+                value_list.append(tuple((mval, action)))
                 total_nodes += n
             return min(value_list), total_nodes
     else:
@@ -81,7 +81,7 @@ def min_value(action_list, board, player_char, player_win, opp_win, opp_char, in
             value_list = []
             for action in action_list:
                 mval, n = max_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1)
-                value_list.append(mval)
+                value_list.append(tuple((mval, action)))
                 total_nodes += n
             return min(value_list), total_nodes
 
@@ -104,7 +104,7 @@ def max_value(action_list, board, player_char, player_win, opp_win, opp_char, in
             value_list = []
             for action in action_list:
                 mval, n = min_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1)
-                value_list.append(mval)
+                value_list.append(tuple((mval, action)))
                 total_nodes += n
             return max(value_list), total_nodes
     else:
@@ -120,7 +120,7 @@ def max_value(action_list, board, player_char, player_win, opp_win, opp_char, in
             value_list = []
             for action in action_list:
                 mval, n = min_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1)
-                value_list.append(mval)
+                value_list.append(tuple((mval, action)))
                 total_nodes += n
             return max(value_list), total_nodes
 
