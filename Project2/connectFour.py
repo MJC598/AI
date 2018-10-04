@@ -30,7 +30,7 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     move = choice[1]
     # print_board(board)
 
-    # print(choice)
+    print(choice)
     action_list.remove(move)
     if not action_list:
         winner = 'tie'
@@ -146,6 +146,116 @@ def update_board(board, player, choice):
     new_board[choice[0]][choice[1]] = symbol
     return new_board
 
+def check_board(board):
+    player = 'E'
+    counter = 1
+    winner = None
+    for x in range(6):
+        for y in range(6):
+            if board[x][y] == 'E':
+                continue
+            else:
+                if board[x][y] == 'X':
+                    player = 'p1'
+                    i, j = x, y
+                    counter = 1
+                    #horizontal check
+                    while(i < 5 and board[i+1][y] == 'X'):
+                        counter += 1
+                        i+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+                    counter = 1
+                    i, j = x, y
+                    #diagonal down right check
+                    while(i < 5 and j < 5 and board[i+1][j+1] == 'X'):
+                        counter += 1
+                        i+=1
+                        j+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+                    counter = 1
+                    i, j = x, y
+                    #vertical check
+                    while(j < 5 and board[i][j+1] == 'X'):
+                        counter += 1
+                        j+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+                    counter = 1
+                    i, j = x, y
+                    #diagonal down left check
+                    while(i > 0 and j < 5 and board[i-1][j+1] == 'X'):
+                        counter += 1
+                        i-=1
+                        j+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+                else:
+                    player = 'p2'
+                    i, j = x, y
+                    counter = 1
+                    #horizontal check
+                    while(i < 5 and board[i+1][y] == 'O'):
+                        counter += 1
+                        i+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+                    counter = 1
+                    i, j = x, y
+                    #diagonal down right check
+                    while(i < 5 and j < 5 and board[i+1][j+1] == 'O'):
+                        counter += 1
+                        i+=1
+                        j+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+                    counter = 1
+                    i, j = x, y
+                    #vertical check
+                    while(j < 5 and board[i][j+1] == 'O'):
+                        counter += 1
+                        j+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+                    counter = 1
+                    i, j = x, y
+                    #diagonal down left check
+                    while(i > 0 and j < 5 and board[i-1][j+1] == 'O'):
+                        counter += 1
+                        i-=1
+                        j+=1
+                        if counter == 4:
+                            winner = player
+                            break
+                    if counter == 4:
+                        break
+        if counter == 4:
+            break
+    return winner
+
+
 #pretty self-explanatory, prints the board
 def print_board(board):
     for x in range(6):
@@ -162,7 +272,7 @@ if __name__ == "__main__":
     x_win = 0
     o_win = 0
     ties = 0
-    player = 'p1'
+    player = 'p2'
     winner = None
     '''
         E - Empty
@@ -197,9 +307,11 @@ if __name__ == "__main__":
             player = 'p2'
             beginning_time = clock()
             winner, board, total_nodes = minimax_tree(board, player, x_list, o_list, action_list)
+            check_board(board)
             end_time = clock()
             print("Time: ", end_time - beginning_time)
             print("Total Nodes: ", total_nodes)
+            winner = check_board(board)
             if winner != None:
                 if winner == 'p2':
                     winner_list.append("p2")
@@ -214,6 +326,7 @@ if __name__ == "__main__":
             end_time = clock()
             print("Time: ", end_time - beginning_time)
             print("Total Nodes: ", total_nodes)
+            winner = check_board(board)
             if winner != None:
                 if winner == 'p1':
                     winner_list.append("p1")

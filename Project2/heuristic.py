@@ -340,12 +340,12 @@ def heuristic(x, y, board, player_char, opp_char, player_win, opponent_win):
 
 
 	#if there is a successful win condition on the board make it a large value
-	if player_win:
-		return 1000000000, total_nodes
+	# if player_win:
+	# 	return 1000000000, total_nodes
 
-	#if there is a bad win condition on the board make it a low value
-	if opponent_win:
-		return -1000000000, total_nodes
+	# #if there is a bad win condition on the board make it a low value
+	# if opponent_win:
+	# 	return -1000000000, total_nodes
 
 	p_tto = len(player_three_two_open)
 	p_too = len(player_three_one_open)
