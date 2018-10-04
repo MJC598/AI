@@ -61,7 +61,9 @@ def check_vertical(x, y, board, player_char, opp_char):
 	coordinate_list = sorted(coordinate_list, key=lambda coord: coord[0])
 	# print(vertical_char_count)
 	# print(empty_space_count)
-	if vertical_char_count <= 1 or empty_space_count == 0:
+	if vertical_char_count >= 4:
+		return 4, coordinate_list
+	elif vertical_char_count <= 1 or empty_space_count == 0:
 		# print(1)
 		coordinate_list = []
 		# print('return')
@@ -71,11 +73,11 @@ def check_vertical(x, y, board, player_char, opp_char):
 		# print('return')
 		return 3, coordinate_list
 
-	elif vertical_char_count == 3 or vertical_char_count >= 4:
-		if empty_space_count == 1 and vertical_char_count < 4:
+	elif vertical_char_count == 3:
+		if empty_space_count == 1:
 			# print('return')
 			return 2, coordinate_list
-		elif empty_space_count == 2 or vertical_char_count >= 4:
+		elif empty_space_count == 2:
 			# print('return')
 			return 1, coordinate_list
 
@@ -126,17 +128,19 @@ def check_horizontal(x, y, board, player_char, opp_char):
 	# Returning the appropriate case numbers and coordinate_list
 	coordinate_list = sorted(coordinate_list, key=lambda coord: coord[0])
 
-	if horizontal_char_count <= 1 or empty_space_count == 0:
+	if horizontal_char_count >= 4:
+		return 4, coordinate_list
+	elif horizontal_char_count <= 1 or empty_space_count == 0:
 		coordinate_list = []
 		return 0, coordinate_list
 
 	elif horizontal_char_count == 2:
 		return 3, coordinate_list
 
-	elif horizontal_char_count == 3 or horizontal_char_count >= 4:
-		if empty_space_count == 1 and horizontal_char_count < 4:
+	elif horizontal_char_count == 3:
+		if empty_space_count == 1:
 			return 2, coordinate_list
-		elif empty_space_count == 2 or horizontal_char_count >= 4:
+		elif empty_space_count == 2:
 			return 1, coordinate_list
 
 def check_diagonal_down(x, y, board, player_char, opp_char):
@@ -190,17 +194,19 @@ def check_diagonal_down(x, y, board, player_char, opp_char):
 	# Returning the appropriate case numbers and coordinate_list
 	coordinate_list = sorted(coordinate_list, key=lambda coord: coord[0])
 
-	if diagonal_char_count <= 1 or empty_space_count == 0:
+	if diagonal_char_count >= 4:
+		return 4, coordinate_list
+	elif diagonal_char_count <= 1 or empty_space_count == 0:
 		coordinate_list = []
 		return 0, coordinate_list
 
 	elif diagonal_char_count == 2:
 		return 3, coordinate_list
 
-	elif diagonal_char_count == 3 or diagonal_char_count >= 4:
-		if empty_space_count == 1 and diagonal_char_count < 4:
+	elif diagonal_char_count == 3:
+		if empty_space_count == 1:
 			return 2, coordinate_list
-		elif empty_space_count == 2 or diagonal_char_count >= 4:
+		elif empty_space_count == 2:
 			return 1, coordinate_list
 
 
@@ -255,20 +261,22 @@ def check_diagonal_up(x, y, board, player_char, opp_char):
 	# Returning the appropriate case numbers and coordinate_list
 	coordinate_list = sorted(coordinate_list, key=lambda coord: coord[0])
 
-	if diagonal_char_count <= 1 or empty_space_count == 0:
+	if diagonal_char_count >= 4:
+		return 4, coordinate_list
+	elif diagonal_char_count <= 1 or empty_space_count == 0:
 		coordinate_list = []
 		return 0, coordinate_list
 
 	elif diagonal_char_count == 2:
 		return 3, coordinate_list
 
-	elif diagonal_char_count == 3 or diagonal_char_count >= 4:
-		if empty_space_count == 1 and diagonal_char_count < 4:
+	elif diagonal_char_count == 3:
+		if empty_space_count == 1:
 			return 2, coordinate_list
-		elif empty_space_count == 2 or diagonal_char_count >= 4:
+		elif empty_space_count == 2:
 			return 1, coordinate_list
 
-def populate_lists(x,y, board, player_char, opp_char, three_two_open, three_one_open, two_open, check_function):
+def populate_lists(x,y, board, player_char, opp_char, three_two_open, three_one_open, two_open, win, check_function):
 	case, coordinates = check_function(x, y, board, player_char, opp_char)
 	if coordinates:
 		if case == 1:
@@ -282,42 +290,52 @@ def populate_lists(x,y, board, player_char, opp_char, three_two_open, three_one_
 		elif case == 3:
 			if coordinates not in two_open:
 				two_open.append(coordinates)
+		elif case == 4:
+			if coordinates not in win:
+				win.append(coordinates)
 
 def heuristic(x, y, board, player_char, opp_char):
+	player_win = []
 	player_three_two_open = []
 	player_three_one_open = []
 	player_two_open = []
 
+	opponent_win = []
 	opponent_three_two_open = []
 	opponent_three_one_open = []
 	opponent_two_open = []
 
 	for i in range(BOARD_DIM):
 		for j in range(BOARD_DIM):
-
 			if board[i][j] == EMPTY_CHAR:
 				continue
 
 			elif board[i][j] == player_char:
 				# Vertical Check
-				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_vertical)
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, player_win, check_vertical)
 				# Horizontal Check
-				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_horizontal)
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, player_win, check_horizontal)
 				# Check Diagonal
-				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_diagonal_up)
-				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, check_diagonal_down)
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, player_win, check_diagonal_up)
+				populate_lists(i, j, board, player_char, opp_char, player_three_two_open, player_three_one_open, player_two_open, player_win, check_diagonal_down)
 
 			elif board[i][j] == opp_char:
 				# Vertical Check
-				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_vertical)
+				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, opponent_win, check_vertical)
 				# Horizontal Check
-				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_horizontal)
+				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, opponent_win, check_horizontal)
 				# Check Diagonal
-				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_diagonal_up)
-				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, check_diagonal_down)
+				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, opponent_win, check_diagonal_up)
+				populate_lists(i, j, board, opp_char, player_char, opponent_three_two_open, opponent_three_one_open, opponent_two_open, opponent_win, check_diagonal_down)
 
 
+	#if there is a successful win condition on the board make it a large value
+	if player_win:
+		return 1000000000
 
+	#if there is a bad win condition on the board make it a low value
+	if opponent_win:
+		return -1000000000
 
 	p_tto = len(player_three_two_open)
 	p_too = len(player_three_one_open)

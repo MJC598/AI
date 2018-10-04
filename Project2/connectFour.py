@@ -20,8 +20,6 @@ def minimax_exec(board, player):
     o_list = []
     #possible moves (list of coordinate pairs)
     action_list = []
-    #variables for number of evaulatable matches
-    a = b = c = d = e = f = 0
     #fill the lists with coordinate pairs of possible moves and all previous moves
     for x in range(6):
         for y in range(6):
@@ -29,14 +27,14 @@ def minimax_exec(board, player):
                 action_list.append(tuple((x,y)))
             elif board[x][y] == 'X':
                 x_list.append(tuple((x,y)))
-                x_check_value = check_around(board, x, y, 'X')
-                if(x_check_value == 4):
+                x_check_value = heuristic(x, y, board, 'X', 'O')
+                if(x_check_value == 1000000000):
                     winner = 'p1'
                     return tuple((winner, None))
             else:
                 o_list.append(tuple((x,y)))
-                y_check_value = check_around(board, x, y, 'O')
-                if(y_check_value == 4):
+                y_check_value = heuristic(x, y, board, 'O', 'X')
+                if(y_check_value == 1000000000):
                     winner = 'p2'
                     return tuple((winner, None))
     #verify there are still possible moves on the board
@@ -51,8 +49,13 @@ def minimax_exec(board, player):
 
     h_value_list = []
 
+    temp_board = board.copy()
+    print_board(board)
+    # print_board(temp_board)
     #returns the max of the min value and the correct move
-    value, move = max(min_value(action_list, board, player_symbol, opponent_symbol, 0))
+    choice = min_value(action_list, temp_board, player_symbol, opponent_symbol, 0)
+    move = choice[1]
+    print_board(board)
 
     #move is a coordinate pair tuple
     return tuple((winner,move))
@@ -66,25 +69,28 @@ def minimax_exec(board, player):
 def min_value(action_list, board, player_char, opp_char, increment):
     value_list = []
     if player_char == 'X':
+        # print('p1 min')
         if increment == 2:
+            value_list = []
             for action in action_list:
-                value_list = []
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, aciton), player_char, opp_char), action)))
-            return min(value_list)
-        else:
-            for action in action_list:
-                value_list = []
-                value_list.append(max_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
-            return min(value_list)
-    else:
-        if increment == 4:
-            for action in action_list:
-                value_list = []
+                # print('hey, im in the min_value but p1')
                 value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
             return min(value_list)
         else:
+            value_list = []
             for action in action_list:
-                value_list = []
+                value_list.append(max_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+            return min(value_list)
+    else:
+        # print('p2 min')
+        if increment == 4:
+            value_list = []
+            for action in action_list:
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+            return min(value_list)
+        else:
+            value_list = []
+            for action in action_list:
                 value_list.append(max_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
             return min(value_list)
 
@@ -93,106 +99,31 @@ def min_value(action_list, board, player_char, opp_char, increment):
 def max_value(action_list, board, player_char, opp_char, increment):
     value_list = []
     if player_char == 'X':
+        # print('p1 max')
         if increment == 2:
+            value_list = []
             for action in action_list:
-                value_list = []
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, aciton), player_char, opp_char), action)))
-            return max(value_list)
-        else:
-            for action in action_list:
-                value_list = []
-                value_list.append(min_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
-            return max(value_list)
-    else:
-        if increment == 4:
-            for action in action_list:
-                value_list = []
+                # print('hey, im in the max_value, but p1')
                 value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
             return max(value_list)
         else:
+            value_list = []
             for action in action_list:
-                value_list = []
                 value_list.append(min_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
             return max(value_list)
-
-#check each of the squares around the active block
-def check_around(board, x, y, value):
-    if(x != 0 or board[x-1][y] == value):
-        #left
-        return 1+check_left(board, x-1, y, value)
-    elif(x != 0 or y != 0 or board[x-1][y-1] == value):
-        #left-up
-        return 1+check_left_up(board, x-1, y-1, value)
-    elif(y != 0 or board[x][y-1] == value):
-        #up
-        return 1+check_up(board, x, y-1, value)
-    elif(x != 6 or y != 0 or board[x+1][y-1] == value):
-        #up-right
-        return 1+check_up_right(board, x+1, y-1, value)
-    elif(x != 6 or board[x+1][y] == value):
-        #right
-        return 1+check_right(board, x+1, y, value)
-    elif(x != 6 or y != 6 or board[x+1][y+1] == value):
-        #right-down
-        return 1+check_right_down(board, x+1, y+1, value)
-    elif(y != 6 or board[x][y+1] == value):
-        #down
-        return 1+check_down(board, x, y+1, value)
-    elif(x != 0 or y != 6 or board[x-1][y+1] == value):
-        #left-down
-        return 1+check_down_left(board, x-1, y+1, value)
     else:
-        #returns the number of adjacent blocks
-        return 1
-
-#sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
-def check_left(board, x, y, value):
-    if(x != 0 or board[x-1][y] == value):
-        return 1 + check_left(board, x-1, y, value)
-    else:
-        return 0
-
-def check_left_up(board, x, y, value):
-    if(x != 0 or y != 0 or board[x-1][y-1] == value):
-        return 1 + check_left_up(board, x-1, y-1, value)
-    else:
-        return 0
-
-def check_up(board, x, y, value):
-    if(y != 0 or board[x][y-1] == value):
-        return 1 + check_up(board, x, y-1, value)
-    else:
-        return 0
-
-def check_up_right(board, x, y, value):
-    if(x != 6 or y != 0 or board[x+1][y-1] == value):
-        return 1 + check_up_right(board, x+1, y-1, value)
-    else:
-        return 0
-
-def check_right(board, x, y, value):
-    if(x != 6 or board[x+1][y] == value):
-        return 1 + check_right(board, x+1, y, value)
-    else:
-        return 0
-
-def check_right_down(board, x, y, value):
-    if(x != 6 or y != 6 or board[x+1][y+1] == value):
-        return 1 + check_right_down(board, x+1, y+1, value)
-    else:
-        return 0
-
-def check_down(board, x, y, value):
-    if(y != 6 or board[x][y+1] == value):
-        return 1 + check_down(board, x, y+1, value)
-    else:
-        return 0
-
-def check_down_left(board, x, y, value):
-    if(x != 0 or y != 6 or board[x-1][y+1] == value):
-        return 1 + check_down_left(board, x-1, y+1, value)
-    else:
-        return 0
+        # print('p2 max')
+        if increment == 4:
+            value_list = []
+            for action in action_list:
+                # print('hey, im in the max value, but p2')
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+            return max(value_list)
+        else:
+            value_list = []
+            for action in action_list:
+                value_list.append(min_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+            return max(value_list)
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
@@ -211,10 +142,9 @@ def update_board(board, player, choice):
     symbol = 'X'
     if player == 'p2':
         symbol = 'O'
-    new_board = board
     #Change board spot out with the appropriate symbol
-    new_board[choice[0]][choice[1]] = symbol
-    return new_board
+    board[choice[0]][choice[1]] = symbol
+    return board
 
 #pretty self-explanatory, prints the board
 def print_board(board):
@@ -232,7 +162,7 @@ if __name__ == "__main__":
     x_win = 0
     o_win = 0
     ties = 0
-    player = 'p1'
+    player = 'p2'
     winner = None
     '''
         E - Empty
