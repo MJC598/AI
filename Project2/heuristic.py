@@ -294,13 +294,11 @@ def populate_lists(x,y, board, player_char, opp_char, three_two_open, three_one_
 			if coordinates not in win:
 				win.append(coordinates)
 
-def heuristic(x, y, board, player_char, opp_char):
-	player_win = []
+def heuristic(x, y, board, player_char, opp_char, player_win, opponent_win):
 	player_three_two_open = []
 	player_three_one_open = []
 	player_two_open = []
 
-	opponent_win = []
 	opponent_three_two_open = []
 	opponent_three_one_open = []
 	opponent_two_open = []

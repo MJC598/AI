@@ -5,6 +5,8 @@ from heuristic import *
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
 def minimax_exec(board, player, x_list, o_list, action_list):
+    player_win = []
+    opp_win = []
     opponent_symbol = 'E'
     player_symbol = 'E'
     if player == 'p1':
@@ -16,7 +18,7 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     #initialize return vars
     winner = None
     #verify there are still possible moves on the board
-    print(action_list)
+    # print(action_list)
     if not action_list:
         winner = 'tie'
         return tuple((winner, None))
@@ -26,15 +28,16 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     # print_board(board)
     # print_board(temp_board)
     #returns the max of the min value and the correct move
-    choice = max_value(action_list, temp_board, player_symbol, opponent_symbol, 0)
-    if choice[0] == 1000000000:
-        winner = 'p1'
-    elif choice[0] == -1000000000:
-        winner = 'p2'
+    choice = max_value(action_list, temp_board, player_symbol, player_win, opp_win, opponent_symbol, 0)
+    # if player_win:
+    #     winner = player
+    val = choice[0]
     move = choice[1]
+    if heuristic(move[0], move[1], update_board(board, player, move), player_symbol, opponent_symbol, player_win, opp_win) == 1000000000:
+        winner = player
     # print_board(board)
 
-    print(choice)
+    # print(choice)
     action_list.remove(move)
     if player_symbol == 'X':
         x_list.append(move)
@@ -49,7 +52,7 @@ def minimax_exec(board, player, x_list, o_list, action_list):
 #
 # ************************************
 
-def min_value(action_list, board, player_char, opp_char, increment):
+def min_value(action_list, board, player_char, player_win, opp_win, opp_char, increment):
     temp_board = deepcopy(board)
     value_list = []
     if player_char == 'X':
@@ -58,29 +61,29 @@ def min_value(action_list, board, player_char, opp_char, increment):
             value_list = []
             for action in action_list:
                 # print('hey, im in the min_value but p1')
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char, player_win, opp_win), action)))
             return min(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(max_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
+                value_list.append(max_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1))
             return min(value_list)
     else:
         # print('p2 min')
         if increment == 3:
             value_list = []
             for action in action_list:
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char, player_win, opp_win), action)))
             return min(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(max_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
+                value_list.append(max_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1))
             return min(value_list)
 
 
 
-def max_value(action_list, board, player_char, opp_char, increment):
+def max_value(action_list, board, player_char, player_win, opp_win, opp_char, increment):
     temp_board = deepcopy(board)
     value_list = []
     if player_char == 'X':
@@ -89,12 +92,12 @@ def max_value(action_list, board, player_char, opp_char, increment):
             value_list = []
             for action in action_list:
                 # print('hey, im in the max_value, but p1')
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char, player_win, opp_win), action)))
             return max(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(min_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
+                value_list.append(min_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1))
             return max(value_list)
     else:
         # print('p2 max')
@@ -102,12 +105,12 @@ def max_value(action_list, board, player_char, opp_char, increment):
             value_list = []
             for action in action_list:
                 # print('hey, im in the max value, but p2')
-                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char), action)))
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(temp_board, player, action), player_char, opp_char, player_win, opp_win), action)))
             return max(value_list)
         else:
             value_list = []
             for action in action_list:
-                value_list.append(min_value(action_list, update_board(temp_board, player, action), player_char, opp_char, increment+1))
+                value_list.append(min_value(action_list, update_board(temp_board, player, action), player_char, player_win, opp_win, opp_char, increment+1))
             return max(value_list)
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
@@ -163,9 +166,13 @@ if __name__ == "__main__":
                  ['E','E','E','E','E','E'], 
                  ['E','E','E','E','E','E']]
     #initial update puts the first move for p1 in the middle of the board
+    beginning_time = clock()
     offset1 = randint(0,1)
     offset2 = randint(0,1)
     board = update_board(new_board, player, (2+offset1,2+offset2))
+    end_time = clock()
+    print_board(board)
+    print("Time: ", end_time - beginning_time)
     action_list = [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(1,0),(1,1),(1,2),(1,3),(1,4),(1,5),(2,0),(2,1),(2,2),(2,3),(2,4),
         (2,5),(3,0),(3,1),(3,2),(3,3),(3,4),(3,5),(4,0),(4,1),(4,2),(4,3),(4,4),(4,5),(5,0),(5,1),(5,2),(5,3),(5,4),(5,5)]
     action_list.remove((2+offset1,2+offset2))
@@ -177,7 +184,10 @@ if __name__ == "__main__":
         #check to see who played last, alternates between p1 and p2
         if(player == 'p1'):
             player = 'p2'
+            beginning_time = clock()
             winner, board = minimax_tree(board, player, x_list, o_list, action_list)
+            end_time = clock()
+            print("Time: ", end_time - beginning_time)
             if winner != None:
                 if winner == 'p2':
                     winner_list.append("p2")
@@ -187,7 +197,10 @@ if __name__ == "__main__":
                 break
         else:
             player = 'p1'
+            beginning_time = clock()
             winner, board = minimax_tree(board, player, x_list, o_list, action_list)
+            end_time = clock()
+            print("Time: ", end_time - beginning_time)
             if winner != None:
                 if winner == 'p1':
                     winner_list.append("p1")
