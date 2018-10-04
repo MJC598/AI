@@ -36,9 +36,9 @@ def minimax_exec(board, player, x_list, o_list, action_list):
     print(move)
     action_list.remove(move)
     if player_symbol == 'X':
-        x_list.push(move)
+        x_list.append(move)
     else:
-        o_list.push(move)
+        o_list.append(move)
     #move is a coordinate pair tuple
     return tuple((winner,move))
 
