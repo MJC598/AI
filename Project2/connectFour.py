@@ -162,7 +162,7 @@ if __name__ == "__main__":
     x_win = 0
     o_win = 0
     ties = 0
-    player = 'p2'
+    player = 'p1'
     winner = None
     '''
         E - Empty
