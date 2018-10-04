@@ -1,10 +1,18 @@
 from time import clock
 from copy import deepcopy
-from random import random
+from random import randint
 from heuristic import *
 
 #this takes the board and evaluates the heuristic to return to the minimax tree
 def minimax_exec(board, player):
+    opponent_symbol = 'E'
+    player_symbol = 'E'
+    if player == 'p1':
+        player_symbol = 'X'
+        opponent_symbol = 'O'
+    else:
+        player_symbol = 'O'
+        opponent_symbol = 'X'
     #initialize return vars
     winner = None
     #previous moves (list of coordinate pairs)
@@ -43,66 +51,8 @@ def minimax_exec(board, player):
 
     h_value_list = []
 
-    for x in action_list:
-        #call function in heurisitc.py to get list of heuristics and run minimax on it
-        h_value_list.append(heuristic( ))
-
-
-    # max(h_value_list)
-    # min(h_value_list)
-
-
-    
-    '''
-    what if we set it up with a sort of ring situation, where it starts in the center(2,2/3,2/2,3/3,3) and traverse out
-        on X's and O's from there? Or what if we have a 2nd array where we keep putting coordinate pairs connected to 1 we 
-        pop out of the x_list and count the number in the array? Something like:
-        tail = ()
-        active = x_list.pop()
-        around = ()
-        if around active
-            around.add
-        tail.add(active)
-        active = around.pop()
-
-        or what if we count it in the initial traversal of the board? 
-            Like go up, up-right, right, right-down, down, down-left, left, left-up whenever we find an X and if there is 
-            one already continue going in the same direction. I think this might be the best way to go
-
-    layout of initial board with 1st move is:
-
-          0 1 2 3 4 5 (*these indicies are for personal use, not actually on board)
-        0 E E E E E E
-        1 E E E E E E 
-        2 E E X E E E
-        3 E E E E E E
-        4 E E E E E E
-        5 E E E E E E 
-
-    maybe traverse action_list and see if they meet any of the requirements to add to a,b,c,d,e,f? 
-    It would speed up every move, but would be incredibly slow at first
-    This would require we check every square around each action_list node like:
-        1 2 3
-        4 X 5
-        6 7 8
-    meaning a max branching factor of 8. However, if the action_list is a corner, then:
-        1 2
-        3 X
-    which would have a max branching factor of 3...
-    We might be able to keep track of this from the previous board iteration too making it have to do much less work?
-
-
-    This is the heuristic function:
-
-        h(n) = 5*[# of 2-side open 3-in-a-row for me (a)]
-               -10*[# of 2-side open 3-in-a-row for opp (b)]
-               +3*[# of 1-side open 3-in-a-row for me (c)]
-               -6*[# of 1-side open 3-in-a-row for opp (d)]
-               +[# of open 2-in-a-row for me (e)]
-               -[# of open 2-in-a-row for opp (f)]
-
-               use 
-    '''
+    #returns the max of the min value and the correct move
+    value, move = max(min_value(action_list, board, player_symbol, opponent_symbol, 0))
 
     #move is a coordinate pair tuple
     return tuple((winner,move))
@@ -113,84 +63,136 @@ def minimax_exec(board, player):
 #
 # ************************************
 
+def min_value(action_list, board, player_char, opp_char, increment):
+    value_list = []
+    if player_char == 'X':
+        if increment == 2:
+            for action in action_list:
+                value_list = []
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, aciton), player_char, opp_char), action)))
+            return min(value_list)
+        else:
+            for action in action_list:
+                value_list = []
+                value_list.append(max_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+            return min(value_list)
+    else:
+        if increment == 4:
+            for action in action_list:
+                value_list = []
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+            return min(value_list)
+        else:
+            for action in action_list:
+                value_list = []
+                value_list.append(max_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+            return min(value_list)
+
+
+
+def max_value(action_list, board, player_char, opp_char, increment):
+    value_list = []
+    if player_char == 'X':
+        if increment == 2:
+            for action in action_list:
+                value_list = []
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, aciton), player_char, opp_char), action)))
+            return max(value_list)
+        else:
+            for action in action_list:
+                value_list = []
+                value_list.append(min_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+            return max(value_list)
+    else:
+        if increment == 4:
+            for action in action_list:
+                value_list = []
+                value_list.append(tuple((heuristic(action[0], action[1], update_board(board, player, action), player_char, opp_char), action)))
+            return max(value_list)
+        else:
+            for action in action_list:
+                value_list = []
+                value_list.append(min_value(action_list, update_board(board, player, action), player_char, opp_char, increment+1))
+            return max(value_list)
+
 #check each of the squares around the active block
-# def check_around(board, x, y, value):
-#     if(x != 0 or board[x-1][y] == value):
-#         #left
-#         return 1+check_left(board, x-1, y, value)
-#     elif(x != 0 or y != 0 or board[x-1][y-1] == value):
-#         #left-up
-#         return 1+check_left_up(board, x-1, y-1, value)
-#     elif(y != 0 or board[x][y-1] == value):
-#         #up
-#         return 1+check_up(board, x, y-1, value)
-#     elif(x != 6 or y != 0 or board[x+1][y-1] == value):
-#         #up-right
-#         return 1+check_up_right(board, x+1, y-1, value)
-#     elif(x != 6 or board[x+1][y] == value):
-#         #right
-#         return 1+check_right(board, x+1, y, value)
-#     elif(x != 6 or y != 6 or board[x+1][y+1] == value):
-#         #right-down
-#         return 1+check_right_down(board, x+1, y+1, value)
-#     elif(y != 6 or board[x][y+1] == value):
-#         #down
-#         return 1+check_down(board, x, y+1, value)
-#     elif(x != 0 or y != 6 or board[x-1][y+1] == value):
-#         #left-down
-#         return 1+check_down_left(board, x-1, y+1, value)
-#     else:
-#         #returns the number of adjacent blocks
-#         return 1
+def check_around(board, x, y, value):
+    if(x != 0 or board[x-1][y] == value):
+        #left
+        return 1+check_left(board, x-1, y, value)
+    elif(x != 0 or y != 0 or board[x-1][y-1] == value):
+        #left-up
+        return 1+check_left_up(board, x-1, y-1, value)
+    elif(y != 0 or board[x][y-1] == value):
+        #up
+        return 1+check_up(board, x, y-1, value)
+    elif(x != 6 or y != 0 or board[x+1][y-1] == value):
+        #up-right
+        return 1+check_up_right(board, x+1, y-1, value)
+    elif(x != 6 or board[x+1][y] == value):
+        #right
+        return 1+check_right(board, x+1, y, value)
+    elif(x != 6 or y != 6 or board[x+1][y+1] == value):
+        #right-down
+        return 1+check_right_down(board, x+1, y+1, value)
+    elif(y != 6 or board[x][y+1] == value):
+        #down
+        return 1+check_down(board, x, y+1, value)
+    elif(x != 0 or y != 6 or board[x-1][y+1] == value):
+        #left-down
+        return 1+check_down_left(board, x-1, y+1, value)
+    else:
+        #returns the number of adjacent blocks
+        return 1
 
-# #sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
-# def check_left(board, x, y, value):
-#     if(x != 0 or board[x-1][y] == value):
-#         return 1 + check_left(board, x-1, y, value)
-#     else:
-#         return 0
+#sorry for the disgusting helper functions but I'm kinda at the point of brute forcing it...
+def check_left(board, x, y, value):
+    if(x != 0 or board[x-1][y] == value):
+        return 1 + check_left(board, x-1, y, value)
+    else:
+        return 0
 
-# def check_left_up(board, x, y, value):
-#     if(x != 0 or y != 0 or board[x-1][y-1] == value):
-#         return 1 + check_left_up(board, x-1, y-1, value)
-#     else:
-#         return 0
+def check_left_up(board, x, y, value):
+    if(x != 0 or y != 0 or board[x-1][y-1] == value):
+        return 1 + check_left_up(board, x-1, y-1, value)
+    else:
+        return 0
 
-# def check_up(board, x, y, value):
-#     if(y != 0 or board[x][y-1] == value):
-#         return 1 + check_up(board, x, y-1, value)
-#     else:
-#         return 0
+def check_up(board, x, y, value):
+    if(y != 0 or board[x][y-1] == value):
+        return 1 + check_up(board, x, y-1, value)
+    else:
+        return 0
 
-# def check_up_right(board, x, y, value):
-#     if(x != 6 or y != 0 or board[x+1][y-1] == value):
-#         return 1 + check_up_right(board, x+1, y-1, value)
-#     else:
-#         return 0
+def check_up_right(board, x, y, value):
+    if(x != 6 or y != 0 or board[x+1][y-1] == value):
+        return 1 + check_up_right(board, x+1, y-1, value)
+    else:
+        return 0
 
-# def check_right(board, x, y, value):
-#     if(x != 6 or board[x+1][y] == value):
-#         return 1 + check_right(board, x+1, y, value)
-#     else:
-#         return 0
+def check_right(board, x, y, value):
+    if(x != 6 or board[x+1][y] == value):
+        return 1 + check_right(board, x+1, y, value)
+    else:
+        return 0
 
-# def check_right_down(board, x, y, value):
-#     if(x != 6 or y != 6 or board[x+1][y+1] == value):
-#         return 1 + check_right_down(board, x+1, y+1, value)
-#     else:
-#         return 0
+def check_right_down(board, x, y, value):
+    if(x != 6 or y != 6 or board[x+1][y+1] == value):
+        return 1 + check_right_down(board, x+1, y+1, value)
+    else:
+        return 0
 
-# def check_down(board, x, y, value):
-#     if(y != 6 or board[x][y+1] == value):
-#         return 1 + check_down(board, x, y+1, value)
-#     else:
-#         return 0
+def check_down(board, x, y, value):
+    if(y != 6 or board[x][y+1] == value):
+        return 1 + check_down(board, x, y+1, value)
+    else:
+        return 0
 
-# def check_down_left(board, x, y, value):
-#     if(x != 0 or y != 6 or board[x-1][y+1] == value):
-#         return 1 + check_down_left(board, x-1, y+1, value)
-#     else:
-#         return 0
+def check_down_left(board, x, y, value):
+    if(x != 0 or y != 6 or board[x-1][y+1] == value):
+        return 1 + check_down_left(board, x-1, y+1, value)
+    else:
+        return 0
 
 #call the heuristic to get the correct move and then execute it. Looks ahead 2 moves (1 for opp, 1 for me)
 #if the game is over, it returns the winner and the board (in a tuple)
@@ -201,6 +203,7 @@ def minimax_tree(board, player):
     if choice is None:
         return tuple((winner, board))
     new_board = update_board(board, player, choice)
+    print_board(new_board)
     return tuple((winner, new_board))
 
 #updates board according to player
@@ -244,8 +247,8 @@ if __name__ == "__main__":
                  ['E','E','E','E','E','E'], 
                  ['E','E','E','E','E','E']]
     #initial update puts the first move for p1 in the middle of the board
-    offset1 = random(0,1)
-    offset2 = random(0,1)
+    offset1 = randint(0,1)
+    offset2 = randint(0,1)
     board = update_board(new_board, player, (2+offset1,2+offset2))
     #run this 100 times to get new winners each time?
     #return p1, p2, or tie breaks the loop
@@ -254,7 +257,7 @@ if __name__ == "__main__":
         if(player == 'p1'):
             player = 'p2'
             winner, board = minimax_tree(board, player)
-            if winner not None:
+            if winner != None:
                 if winner == 'p2':
                     winner_list.append("p2")
                     o_win += 1
@@ -264,7 +267,7 @@ if __name__ == "__main__":
         else:
             player = 'p1'
             winner, board = minimax_tree(board, player)
-            if winner not None:
+            if winner != None:
                 if winner == 'p1':
                     winner_list.append("p1")
                     x_win += 1
