@@ -1,5 +1,16 @@
+"""
+Implementation of backtracking search using MRV and degree heuristic
+and forward checking to solve the Boolean Satisfiability Problem
+or SAT.
+
+Note
+--------------------
+
+Although we can solve it this way, the problem is NP-Complete and
+therefore, we may not be solving it in the most efficient way.
+"""
 from time import clock
-from copy import deepcopy
+from  copy import deepcopy
 
 def file_to_line_list(filename):
     """
@@ -11,14 +22,11 @@ def file_to_line_list(filename):
     returns list of lines
     """
     lines = []
-
     with open(filename) as file:
         for line in file:
             # rstrip() removes the '\n' newline character
             lines.append(line.rstrip().split())
-
     return lines
-
 
 if __name__ == "__main__":
     pass
