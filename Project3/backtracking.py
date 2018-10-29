@@ -10,7 +10,7 @@ Although we can solve it this way, the problem is NP-Complete and
 therefore, we may not be solving it in the most efficient way.
 """
 from time import clock
-from  copy import deepcopy
+from copy import deepcopy
 
 def file_to_line_list(filename):
     """
