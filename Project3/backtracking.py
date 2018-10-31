@@ -13,6 +13,9 @@ from utils import argmin_random_tie, count, first
 from time import clock
 from copy import deepcopy
 from csp import *
+from plotly import __version__
+from plotly.offline import plot
+import plotly.graph_objs as go
 
 def file_to_line_list(filename):
     """
@@ -67,8 +70,6 @@ def backtracking_search(csp,
     assert result is None or csp.goal_test(result)
     return result
 
-
-
 if __name__ == "__main__":
     ex1 = "example1.txt"
     ex2 = "example2.txt"
@@ -78,3 +79,14 @@ if __name__ == "__main__":
     constraints2 = file_to_line_list(ex2)
     constraints3 = file_to_line_list(ex3)
     constraints4 = file_to_line_list(ex4)
+
+    #this is all the stuff to graph the data
+    e1 = go.Scatter(x=1, y=results1, name='Example 1 Results')
+    e2 = go.Scatter(x=2, y=results2, name='Example 2 Results')
+    e3 = go.Scatter(x=3, y=results3, name='Example 3 Results')
+    e4 = go.Scatter(x=4, y=results4, name='Example 4 Results')
+
+    data = [e1, e2, e3, e4]
+    layout = go.Layout(title='CSP Results', xaxis=dict(title='Variable ID'), yaxis=dict(title='True/False Value'))
+    fig = go.Figure(data = data, layout = layout)
+    plot_url = plot(fig, filename='results.html')
