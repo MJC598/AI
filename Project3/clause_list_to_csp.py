@@ -11,6 +11,14 @@ def unordered_domain_values(var, assignment, csp):
 def no_inference(csp, var, value, assignment, removals):
     return True
 
+def disjunction_constraint(clause):
+
+    for var in clause:
+        if var == True:
+            return True
+
+    return False
+
 def clause_list_to_csp(clause_list):
     '''csp constructor is below
 
