@@ -13,6 +13,7 @@ from utils import argmin_random_tie, count, first
 from time import clock
 from copy import deepcopy
 from csp import *
+from clause_list_to_csp import *
 from plotly import __version__
 from plotly.offline import plot
 import plotly.graph_objs as go
@@ -28,20 +29,20 @@ def file_to_line_list(filename):
     first constraint is always formatted ['p', 'cnf', '# of variables', '# of clauses']
     following are all lists of clauses that terminate with a '0' (which is pulled off below)
     """
-    constraints = []
+    clause_list = []
     with open(filename, "r") as file:
         for line in file:
             # rstrip() removes the '\n' newline character
-            constraints.append(line.rstrip().split())
+            clause_list.append(line.rstrip().split())
 
-    num_vars = constraints[0][2]
-    num_clauses = constraints[0][3]
+    num_vars = clause_list[0][2]
+    num_clauses = clause_list[0][3]
     #removing 0s at the end of each list except the first one
-    for x in constraints:
+    for x in clause_list:
         if x[0] not 'p':
             del x[-1]
 
-    return constraints
+    return clause_list
 
 #this search is the exact same as in-class provided code
 #https://github.com/aimacode/aima-python 
@@ -70,17 +71,30 @@ def backtracking_search(csp,
     assert result is None or csp.goal_test(result)
     return result
 
-if __name__ == "__main__":
-    ex1 = "example1.txt"
-    ex2 = "example2.txt"
-    ex3 = "example3.txt"
-    ex4 = "example4.txt"
-    constraints1 = file_to_line_list(ex1)
-    constraints2 = file_to_line_list(ex2)
-    constraints3 = file_to_line_list(ex3)
-    constraints4 = file_to_line_list(ex4)
+def mrv(assignment, csp):
+    return argmin_random_tie(
+        [v for v in csp.variables if v not in assignment],
+        key=lambda var: num_legal_values(csp, var, assignment))
 
-    #this is all the stuff to graph the data
+def num_legal_values(csp, var, assignment):
+    if csp.curr_domains:
+        return len(csp.curr_domains[var])
+    else:
+        return count(csp.nconflicts(var, val, assignment) == 0 for val in csp.domains[var])
+
+def forward_checking(csp, var, value, assignment, removals):
+    csp.support_pruning()
+    for B in csp.neighbors[var]:
+        if B not in assignment:
+            for b in csp.curr_domains[B][:]:
+                if not csp.constraints(var, value, B, b):
+                    csp.prune(B, b, removals)
+            if not csp.curr_domains[B]:
+                return False
+    return True
+
+#this is all the stuff to graph the data
+def plot_it(results1, results2, results3, results4):
     e1 = go.Scatter(x=1, y=results1, name='Example 1 Results')
     e2 = go.Scatter(x=2, y=results2, name='Example 2 Results')
     e3 = go.Scatter(x=3, y=results3, name='Example 3 Results')
@@ -90,3 +104,16 @@ if __name__ == "__main__":
     layout = go.Layout(title='CSP Results', xaxis=dict(title='Variable ID'), yaxis=dict(title='True/False Value'))
     fig = go.Figure(data = data, layout = layout)
     plot_url = plot(fig, filename='results.html')
+
+
+if __name__ == "__main__":
+    beginning_time = clock()
+    #plot each of the results
+    plot_it(backtracking_search(clause_list_to_graph(file_to_line_list("example1.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_graph(file_to_line_list("example2.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_graph(file_to_line_list("example3.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_graph(file_to_line_list("example4.txt")), select_unassigned_variable=mrv, inference=forward_checking))
+    end_time = clock()
+    print("Time: ", end_time - beginning_time)
+
+
