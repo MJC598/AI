@@ -1,6 +1,16 @@
 #this function takes a clause_list and returns a csp
 from utils import argmin_random_tie, count, first
 from csp import *
+
+def first_unassigned_variable(assignment, csp):
+    return first([var for var in csp.variables if var not in assignment])
+
+def unordered_domain_values(var, assignment, csp):
+    return csp.choices(var)
+
+def no_inference(csp, var, value, assignment, removals):
+    return True
+
 def clause_list_to_csp(clause_list):
     '''csp constructor is below
 
