@@ -44,6 +44,7 @@ def file_to_line_list(filename):
 
     return clause_list
 
+
 #this search is the exact same as in-class provided code
 #https://github.com/aimacode/aima-python 
 def backtracking_search(csp, 
@@ -109,10 +110,10 @@ def plot_it(results1, results2, results3, results4):
 if __name__ == "__main__":
     beginning_time = clock()
     #plot each of the results
-    plot_it(backtracking_search(clause_list_to_graph(file_to_line_list("example1.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_graph(file_to_line_list("example2.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_graph(file_to_line_list("example3.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_graph(file_to_line_list("example4.txt")), select_unassigned_variable=mrv, inference=forward_checking))
+    plot_it(backtracking_search(clause_list_to_csp(file_to_line_list("example1.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example2.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example3.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example4.txt")), select_unassigned_variable=mrv, inference=forward_checking))
     end_time = clock()
     print("Time: ", end_time - beginning_time)
 
