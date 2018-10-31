@@ -25,8 +25,8 @@ def clause_list_to_csp(clause_list):
        4. constraints
 
     '''
-    num_vars = int(clause_list[0][2])
-    num_clauses = int(clause_list[0][3])
+    num_vars = clause_list[0][2]
+    num_clauses = clause_list[0][3]
     variables = []
     domains = []
 
