@@ -96,10 +96,10 @@ def forward_checking(csp, var, value, assignment, removals):
 
 #this is all the stuff to graph the data
 def plot_it(results1, results2, results3, results4):
-    e1 = go.Scatter(x=1, y=results1, name='Example 1 Results')
-    e2 = go.Scatter(x=2, y=results2, name='Example 2 Results')
-    e3 = go.Scatter(x=3, y=results3, name='Example 3 Results')
-    e4 = go.Scatter(x=4, y=results4, name='Example 4 Results')
+    e1 = go.Scatter(x=[1], y=results1, name='Example 1 Results')
+    e2 = go.Scatter(x=[2], y=results2, name='Example 2 Results')
+    e3 = go.Scatter(x=[3], y=results3, name='Example 3 Results')
+    e4 = go.Scatter(x=[4], y=results4, name='Example 4 Results')
 
     data = [e1, e2, e3, e4]
     layout = go.Layout(title='CSP Results', xaxis=dict(title='Variable ID'), yaxis=dict(title='True/False Value'))

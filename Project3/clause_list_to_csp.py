@@ -6,6 +6,23 @@ def clause_list_to_csp(clause_list):
             def __init__(self, variables, domains, neighbors, constraints):
 
        we need to take the clause list which is a list of lists formatted as ['x1', 'x2', 'x3' ... size]
-       where size is given in clause_list[0][2] and the number of distinct clause lists is given at clause_list[0][3]
-       
+       where size is given in clause_list[0][2] and the number of distinct clause lists in clause_list is given at clause_list[0][3]
+       1. variables is x1, x2, x3,... size:
+       can we just have a loop that creates a set of variables from [1...size]?
+       2. domains are T/F for each variable. E for not evaluated yet
+       3. neighbors 
+       4. constraints
+
     '''
+    num_vars = int(clause_list[0][2])
+    num_clauses = int(clause_list[0][3])
+    variables = []
+    domains = []
+
+    for x in range(num_vars):
+        #appends each of the variables 1-num_vars
+        variables.append(x)
+        #adds 'E' to the domains list for each variable
+        domains.append('E')
+
+    
