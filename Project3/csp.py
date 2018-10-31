@@ -21,7 +21,7 @@ class Problem(object):
         if isinstance(self.goal, list):
             return is_in(state, self.goal)
         else:
-            return state = self.goal
+            return state == self.goal
 
     def path_cost(self, c, state1, action, state2):
         return c + 1
