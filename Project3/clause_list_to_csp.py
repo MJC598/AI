@@ -1,7 +1,7 @@
 #this function takes a clause_list and returns a csp
 from utils import argmin_random_tie, count, first
 from csp import *
-def clause_list_to_csp(clause_list, num_vars, num_clauses):
+def clause_list_to_csp(clause_list):
     '''csp constructor is below
 
             def __init__(self, variables, domains, neighbors, constraints):
@@ -15,6 +15,8 @@ def clause_list_to_csp(clause_list, num_vars, num_clauses):
        4. constraints
 
     '''
+    num_vars = clause_list[0][2]
+    num_clauses = clause_list[0][3]
     variables = []
     domains = []
 
