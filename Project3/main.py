@@ -23,24 +23,29 @@ def file_to_line_list(filename):
     e.g. the line "p cnf 3 5" would be added to the list as:
     ['p', 'cnf', '3', '5']
 
-    returns list of clauses
-    first clause is always formatted ['p', 'cnf', '# of variables', '# of clauses']
+    The first clause is always formatted ['p', 'cnf', '# of variables', '# of clauses']
     following are all lists of clauses that terminate with a '0' (which is pulled off below)
+
+    returns list of clauses, number of variables, and number of clauses
     """
     clause_list = []
     with open(filename, "r") as file:
         for line in file:
             # rstrip() removes the '\n' newline character
             clause_list.append(line.rstrip().split())
-
     num_vars = clause_list[0][2]
     num_clauses = clause_list[0][3]
-    #removing 0s at the end of each list except the first one
-    for x in clause_list:
-        if x[0] not 'p':
-            del x[-1]
+    
+    # Final formatting of the list
+    for x in range(len(clause_list) + 1):
+        # Remove 0's that denote end of a line
+        del clause_list[x][-1]
 
-    return clause_list
+        # Convert each variable in the clause from string to int
+        for v in range(len(clause[x])):
+            clause[x][v] = int(clause[x][v])
+
+    return clause_list, num_vars, num_clauses
 
 #this is all the stuff to graph the data
 def plot_it(results1, results2, results3, results4):
