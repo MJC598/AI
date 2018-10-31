@@ -35,13 +35,13 @@ def file_to_line_list(filename):
             clause_list.append(line.rstrip().split())
 
     # Final formatting of the list
-    for x in range(len(clause_list) + 1):
+    for x in range(len(clause_list) - 1):
         # Remove 0's that denote end of a line
-        del clause_list[x][-1]
+        del clause_list[x+1][-1]
 
         # Convert each variable in the clause from string to int
-        for v in range(len(clause[x])):
-            clause[x][v] = int(clause[x][v])
+        for v in range(len(clause_list[x+1])):
+            clause_list[x+1][v] = int(clause_list[x+1][v])
 
     return clause_list
 
@@ -61,10 +61,10 @@ def plot_it(results1, results2, results3, results4):
 if __name__ == "__main__":
     beginning_time = clock()
     #plot each of the results
-    plot_it(backtracking_search(clause_list_to_csp(file_to_line_list("example1.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_csp(file_to_line_list("example2.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_csp(file_to_line_list("example3.txt")), select_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_csp(file_to_line_list("example4.txt")), select_unassigned_variable=mrv, inference=forward_checking))
+    plot_it(backtracking_search(clause_list_to_csp(file_to_line_list("example1.txt")), selected_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example2.txt")), selected_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example3.txt")), selected_unassigned_variable=mrv, inference=forward_checking), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example4.txt")), selected_unassigned_variable=mrv, inference=forward_checking))
     end_time = clock()
     print("Time: ", end_time - beginning_time)
 

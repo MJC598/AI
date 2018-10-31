@@ -25,8 +25,8 @@ def clause_list_to_csp(clause_list):
        4. constraints
 
     '''
-    num_vars = clause_list[0][2]
-    num_clauses = clause_list[0][3]
+    num_vars = int(clause_list[0][2])
+    num_clauses = int(clause_list[0][3])
     variables = []
     domains = []
 
@@ -39,10 +39,8 @@ def clause_list_to_csp(clause_list):
 
 #this search is the exact same as in-class provided code
 #https://github.com/aimacode/aima-python 
-def backtracking_search(csp, 
-    selected_unassigned_variable = first_unassigned_variable, 
-    order_domain_values = unordered_domain_values, 
-    inference = no_inference):
+def backtracking_search(csp, selected_unassigned_variable = first_unassigned_variable, \
+                        order_domain_values = unordered_domain_values, inference = no_inference):
     
     def backtrack(assignment):
         if len(assignment) == len(csp.variables):
