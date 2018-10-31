@@ -1,4 +1,4 @@
-def argmin_random_tie(seq, key=identity):
+def argmin_random_tie(seq, key= lambda x: x):
     """Return a minimum element that ties at random"""
     return min(shuffled(seq), key=key)
 
