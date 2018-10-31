@@ -26,16 +26,14 @@ def file_to_line_list(filename):
     The first clause is always formatted ['p', 'cnf', '# of variables', '# of clauses']
     following are all lists of clauses that terminate with a '0' (which is pulled off below)
 
-    returns list of clauses, number of variables, and number of clauses
+    returns list of clauses
     """
     clause_list = []
     with open(filename, "r") as file:
         for line in file:
             # rstrip() removes the '\n' newline character
             clause_list.append(line.rstrip().split())
-    num_vars = clause_list[0][2]
-    num_clauses = clause_list[0][3]
-    
+
     # Final formatting of the list
     for x in range(len(clause_list) + 1):
         # Remove 0's that denote end of a line
@@ -45,7 +43,7 @@ def file_to_line_list(filename):
         for v in range(len(clause[x])):
             clause[x][v] = int(clause[x][v])
 
-    return clause_list, num_vars, num_clauses
+    return clause_list
 
 #this is all the stuff to graph the data
 def plot_it(results1, results2, results3, results4):
