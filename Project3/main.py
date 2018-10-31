@@ -9,10 +9,8 @@ Note
 Although we can solve it this way, the problem is NP-Complete and
 therefore, we may not be solving it in the most efficient way.
 """
-from utils import argmin_random_tie, count, first
 from time import clock
 from copy import deepcopy
-from csp import *
 from clause_list_to_csp import *
 from plotly import __version__
 from plotly.offline import plot
@@ -43,56 +41,6 @@ def file_to_line_list(filename):
             del x[-1]
 
     return clause_list
-
-
-#this search is the exact same as in-class provided code
-#https://github.com/aimacode/aima-python 
-def backtracking_search(csp, 
-    selected_unassigned_variable = first_unassigned_variable, 
-    order_domain_values = unordered_domain_values, 
-    inference = no_inference):
-    
-    def backtrack(assignment):
-        if len(assignment) == len(csp.variables):
-            return assignment
-        var = selected_unassigned_variable(assignment, csp)
-        for value in order_domain_values(var, assignment, csp):
-            if 0 == csp.nconflicts(var, value, assignment):
-                csp.assign(var, value, assignment)
-                removals = csp.suppose(var, value)
-                if inference(csp, var, value, assignment, removals):
-                    result = backtrack(assignment)
-                    if result is not None:
-                        return result
-                csp.restore(removals)
-        csp.unassign(var, assignment)
-        return None
-
-    result = backtrack({})
-    assert result is None or csp.goal_test(result)
-    return result
-
-def mrv(assignment, csp):
-    return argmin_random_tie(
-        [v for v in csp.variables if v not in assignment],
-        key=lambda var: num_legal_values(csp, var, assignment))
-
-def num_legal_values(csp, var, assignment):
-    if csp.curr_domains:
-        return len(csp.curr_domains[var])
-    else:
-        return count(csp.nconflicts(var, val, assignment) == 0 for val in csp.domains[var])
-
-def forward_checking(csp, var, value, assignment, removals):
-    csp.support_pruning()
-    for B in csp.neighbors[var]:
-        if B not in assignment:
-            for b in csp.curr_domains[B][:]:
-                if not csp.constraints(var, value, B, b):
-                    csp.prune(B, b, removals)
-            if not csp.curr_domains[B]:
-                return False
-    return True
 
 #this is all the stuff to graph the data
 def plot_it(results1, results2, results3, results4):

@@ -3,8 +3,6 @@
 #specifically the csp.py and search.py files
 
 from utils import is_in
-from time import clock
-from copy import deepcopy
 
 #This abstract class is pulled directly from the cited source on search.py
 class Problem(object):
