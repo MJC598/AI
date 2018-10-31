@@ -25,8 +25,8 @@ def file_to_line_list(filename):
     e.g. the line "p cnf 3 5" would be added to the list as:
     ['p', 'cnf', '3', '5']
 
-    returns list of constraints
-    first constraint is always formatted ['p', 'cnf', '# of variables', '# of clauses']
+    returns list of clauses
+    first clause is always formatted ['p', 'cnf', '# of variables', '# of clauses']
     following are all lists of clauses that terminate with a '0' (which is pulled off below)
     """
     clause_list = []
