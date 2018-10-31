@@ -16,4 +16,6 @@ def first(iterable, default=None):
     except TypeError:
         return next(iterable, default)
 
+def is_in(elt, seq):
+    return any(x is elt for x in seq)
 
