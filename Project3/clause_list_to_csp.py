@@ -6,6 +6,7 @@ def first_unassigned_variable(assignment, csp):
     return first([var for var in csp.variables if var not in assignment])
 
 def unordered_domain_values(var, assignment, csp):
+    #return all values from var that aren't ruled out
     return csp.choices(var)
 
 def no_inference(csp, var, value, assignment, removals):
@@ -51,13 +52,20 @@ def backtracking_search(csp, selected_unassigned_variable = first_unassigned_var
                         order_domain_values = unordered_domain_values, inference = no_inference):
     
     def backtrack(assignment):
+        #if length of assignment list == length of variables list return assignment list
         if len(assignment) == len(csp.variables):
             return assignment
+        #this runs mrv
         var = selected_unassigned_variable(assignment, csp)
+        #for each value in var that hasn't been removed
         for value in order_domain_values(var, assignment, csp):
+            #if there are no conflicts
             if 0 == csp.nconflicts(var, value, assignment):
+                #assign a value to the csp
                 csp.assign(var, value, assignment)
+                #add to the list of removals the new values
                 removals = csp.suppose(var, value)
+                #if forward checking is true
                 if inference(csp, var, value, assignment, removals):
                     result = backtrack(assignment)
                     if result is not None:
@@ -76,18 +84,26 @@ def mrv(assignment, csp):
         key=lambda var: num_legal_values(csp, var, assignment))
 
 def num_legal_values(csp, var, assignment):
+    #remaining values that can still work for variables
     if csp.curr_domains:
         return len(csp.curr_domains[var])
     else:
         return count(csp.nconflicts(var, val, assignment) == 0 for val in csp.domains[var])
 
 def forward_checking(csp, var, value, assignment, removals):
+    #removes values from domain
     csp.support_pruning()
+    #for each of the neighbors
     for B in csp.neighbors[var]:
+        #if the neighbor is not in the assignment
         if B not in assignment:
+            #for each value in avaliable domains
             for b in csp.curr_domains[B][:]:
+                #if the constraint doesn't work
                 if not csp.constraints(var, value, B, b):
+                    #remove the value from the list
                     csp.prune(B, b, removals)
+            #if no value is avaliable, the tree fails
             if not csp.curr_domains[B]:
                 return False
     return True
