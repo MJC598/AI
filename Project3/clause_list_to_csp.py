@@ -2,15 +2,9 @@
 from utils import argmin_random_tie, count, first
 from csp import *
 
-def first_unassigned_variable(assignment, csp):
-    return first([var for var in csp.variables if var not in assignment])
-
 def unordered_domain_values(var, assignment, csp):
     #return all values from var that aren't ruled out
     return csp.choices(var)
-
-def no_inference(csp, var, value, assignment, removals):
-    return True
 
 def disjunction_constraint(clause):
 
@@ -48,17 +42,16 @@ def clause_list_to_csp(clause_list):
 
 #this search is the exact same as in-class provided code
 #https://github.com/aimacode/aima-python 
-def backtracking_search(csp, selected_unassigned_variable = first_unassigned_variable, \
-                        order_domain_values = unordered_domain_values, inference = no_inference):
+def backtracking_search(csp):
     
     def backtrack(assignment):
         #if length of assignment list == length of variables list return assignment list
         if len(assignment) == len(csp.variables):
             return assignment
         #this runs mrv
-        var = selected_unassigned_variable(assignment, csp)
+        var = mrv(assignment, csp)
         #for each value in var that hasn't been removed
-        for value in order_domain_values(var, assignment, csp):
+        for value in unordered_domain_values(var, assignment, csp):
             #if there are no conflicts
             if 0 == csp.nconflicts(var, value, assignment):
                 #assign a value to the csp
@@ -66,7 +59,7 @@ def backtracking_search(csp, selected_unassigned_variable = first_unassigned_var
                 #add to the list of removals the new values
                 removals = csp.suppose(var, value)
                 #if forward checking is true
-                if inference(csp, var, value, assignment, removals):
+                if forward_checking(csp, var, value, assignment, removals):
                     result = backtrack(assignment)
                     if result is not None:
                         return result

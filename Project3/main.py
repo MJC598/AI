@@ -61,10 +61,10 @@ def plot_it(results1, results2, results3, results4):
 if __name__ == "__main__":
     beginning_time = clock()
     #plot each of the results
-    plot_it(backtracking_search(clause_list_to_csp(file_to_line_list("example1.txt")), selected_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_csp(file_to_line_list("example2.txt")), selected_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_csp(file_to_line_list("example3.txt")), selected_unassigned_variable=mrv, inference=forward_checking), 
-        backtracking_search(clause_list_to_csp(file_to_line_list("example4.txt")), selected_unassigned_variable=mrv, inference=forward_checking))
+    plot_it(backtracking_search(clause_list_to_csp(file_to_line_list("example1.txt"))), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example2.txt"))), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example3.txt"))), 
+        backtracking_search(clause_list_to_csp(file_to_line_list("example4.txt"))))
     end_time = clock()
     print("Time: ", end_time - beginning_time)
 
