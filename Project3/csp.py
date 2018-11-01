@@ -55,7 +55,9 @@ class CSP(Problem):
         #return the number conflicts var=val has with other variables
         def conflict(var2):
             return (var2 in assignment and not self.constraints(var, val, var2, assignment[var2]))
-        # print(self.neighbors)
+        print('val: ', val)
+        print('var: ', var)
+        print(self.neighbors)
         return count(conflict(v) for v in self.neighbors[var]) 
 
     #display the CSP and the assignment list

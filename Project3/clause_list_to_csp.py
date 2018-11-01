@@ -37,8 +37,8 @@ def clause_list_to_csp(clause_list):
     for x in range(num_vars):
         #appends each of the variables 1-num_vars
         variables.append(x)
-        #adds 'E' to the domains list for each variable
-        domains.append('E')
+        #adds '[0, 1]' to the domains list for each variable to signify there hasn't been a choice yet
+        domains.append([0, 1])
 
     #traverse thru list of clauses
     for x in clause_list:
