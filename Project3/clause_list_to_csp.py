@@ -6,12 +6,13 @@ def unordered_domain_values(var, assignment, csp):
     #return all values from var that aren't ruled out
     return csp.choices(var)
 
-def disjunction_constraint(clause):
-
-    for var in clause:
-        if var == True:
-            return True
-
+def disjunction_constraint(var, val, var2, val2):
+    print('var: ', var)
+    print('val: ', val)
+    print('var2: ', var2)
+    print('val2: ', val2)
+    if val == True or val2 == True:
+        return True
     return False
 
 def clause_list_to_csp(clause_list):
@@ -31,14 +32,14 @@ def clause_list_to_csp(clause_list):
     num_vars = int(clause_list[0][2])
     num_clauses = int(clause_list[0][3])
     variables = []
-    domains = []
+    domains = {}
     neighbors = {}
 
-    for x in range(num_vars):
+    for x in range(1, num_vars+1):
         #appends each of the variables 1-num_vars
         variables.append(x)
         #adds '[0, 1]' to the domains list for each variable to signify there hasn't been a choice yet
-        domains.append([0, 1])
+        domains[x] = [0, 1]
 
     #traverse thru list of clauses
     for x in clause_list:
@@ -107,9 +108,13 @@ def mrv(assignment, csp):
 
 def num_legal_values(csp, var, assignment):
     #remaining values that can still work for variables
+    # print(csp.curr_domains)
+    # csp.display(assignment)
     if csp.curr_domains:
         return len(csp.curr_domains[var])
     else:
+        print(var)
+        print(csp.domains)
         return count(csp.nconflicts(var, val, assignment) == 0 for val in csp.domains[var])
 
 def forward_checking(csp, var, value, assignment, removals):
