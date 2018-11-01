@@ -32,6 +32,7 @@ def clause_list_to_csp(clause_list):
     num_clauses = int(clause_list[0][3])
     variables = []
     domains = []
+    neighbors = {}
 
     for x in range(num_vars):
         #appends each of the variables 1-num_vars
@@ -39,6 +40,19 @@ def clause_list_to_csp(clause_list):
         #adds 'E' to the domains list for each variable
         domains.append('E')
 
+    #traverse thru list of clauses
+    for x in clause_list:
+        #traverse thru each clause
+        for y in x:
+            #if list not last element in clause
+            if y < num_vars:
+                neighbors[abs(x[y])] = x[y+1]
+            #if not first element in clause
+            if y > 0:
+                neighbors[abs(x[y])] = x[y-1]
+    
+    csp = CSP(variables, domains, neighbors, constraints)
+    return csp
 
 #this search is the exact same as in-class provided code
 #https://github.com/aimacode/aima-python 
