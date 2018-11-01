@@ -2,7 +2,7 @@
 #https://github.com/aimacode/aima-python 
 #specifically the csp.py and search.py files
 
-from utils import is_in
+from utils import is_in, count
 
 #This abstract class is pulled directly from the cited source on search.py
 class Problem(object):

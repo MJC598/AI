@@ -42,16 +42,26 @@ def clause_list_to_csp(clause_list):
 
     #traverse thru list of clauses
     for x in clause_list:
-        #traverse thru each clause
-        for y in x:
-            #if list not last element in clause
-            if y < num_vars:
-                neighbors[abs(x[y])] = x[y+1]
-            #if not first element in clause
-            if y > 0:
-                neighbors[abs(x[y])] = x[y-1]
+        # print(x)
+        if x[0] != 'p':
+            #traverse thru each clause
+            counter = 0
+            for y in x:
+                # print(y)
+                last = x[-1]
+                first = x[0]
+                #if list not last element in clause
+                if int(y) != last:
+                    val = abs(int(y))
+                    neighbors[val] = x[counter+1] 
+                #if not first element in clause
+                if int(y) != first:
+                    val = abs(int(y))
+                    neighbors[val] = x[counter-1]
+                #counter
+                counter += 1
     
-    csp = CSP(variables, domains, neighbors, constraints)
+    csp = CSP(variables, domains, neighbors, constraints=disjunction_constraint)
     return csp
 
 #this search is the exact same as in-class provided code

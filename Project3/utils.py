@@ -1,3 +1,5 @@
+import random
+
 def argmin_random_tie(seq, key= lambda x: x):
     """Return a minimum element that ties at random"""
     return min(shuffled(seq), key=key)
@@ -19,3 +21,8 @@ def first(iterable, default=None):
 def is_in(elt, seq):
     return any(x is elt for x in seq)
 
+def shuffled(iterable):
+    """Randomly shuffle a copy of iterable."""
+    items = list(iterable)
+    random.shuffle(items)
+    return items
