@@ -50,14 +50,15 @@ def clause_list_to_csp(clause_list):
                 # print(y)
                 last = x[-1]
                 first = x[0]
+                # neighbors[abs(int(y))] = []
                 #if list not last element in clause
                 if int(y) != last:
                     val = abs(int(y))
-                    neighbors[val] = x[counter+1] 
+                    neighbors[val] = [x[counter+1]] 
                 #if not first element in clause
                 if int(y) != first:
                     val = abs(int(y))
-                    neighbors[val] = x[counter-1]
+                    neighbors[val] = [x[counter-1]]
                 #counter
                 counter += 1
     
